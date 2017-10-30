@@ -1,23 +1,18 @@
 $(document).ready(function() {
   var $formSearch = $('form#search');
   var $searchInput = $formSearch.find('input[type=text]');
-  var $searchLabel = $formSearch.find('label');
-  var $hintText = $searchLabel.text();
-  $searchInput.attr('value', $hintText);
-  $searchInput.addClass('hint');
-  $searchLabel.remove();
+  var $hintText = $formSearch.find('label').remove().text();
+  $searchInput.attr('value', $hintText).addClass('hint');
 
   //focus event handler
-  $searchInput.focus(function() {
-    $(this).val('');
-    $(this).removeClass('hint');
+  $searchInput.bind('focus',function() {
+    $(this).val('').removeClass('hint');
   });
 
   //blur event Handler
-  $searchInput.blur(function() {
+  $searchInput.bind('blur', function() {
     if(!$(this).val()) {
-      $(this).val($hintText);
-      $(this).addClass('hint');
+      $(this).val($hintText).addClass('hint');
     }
   });
 });
