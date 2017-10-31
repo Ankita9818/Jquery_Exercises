@@ -6,24 +6,26 @@ function InputHint(options) {
 }
 
 InputHint.prototype.init = function() {
-  var hintText = this.searchLabel.remove().text();
-  this.searchInput.attr('value', hintText).addClass(this.classToAdd);
+  this.hintText = this.searchLabel.remove().text();
+  this.searchInput.attr('value', this.hintText).addClass(this.classToAdd);
   this.focus();
-  this.blur(hintText);
+  this.blur();
 };
 
 InputHint.prototype.focus = function() {
   var _this = this;
   this.searchInput.bind('focus',function() {
-    _this.searchInput.val('').removeClass(_this.classToAdd);
+    if(!_this.searchInput.val() || _this.searchInput.val() == _this.hintText) {
+      _this.searchInput.val('').removeClass(_this.classToAdd);
+    }
   });
 };
 
-InputHint.prototype.blur = function(hintText) {
+InputHint.prototype.blur = function() {
   var _this = this;
   this.searchInput.bind('blur', function() {
     if(!_this.searchInput.val()) {
-      _this.searchInput.val(hintText).addClass(_this.classToAdd);
+      _this.searchInput.val(_this.hintText).addClass(_this.classToAdd);
     }
   });
 };
