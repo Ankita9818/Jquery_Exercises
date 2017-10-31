@@ -21,7 +21,7 @@ Load.prototype.addclickHandler = function($currentBlogItem) {
   });
 }
 
-$(document).ready(function() {
+$(function() {
   var options = {
     blogHeadlines : $("div#blog h3")
   },
