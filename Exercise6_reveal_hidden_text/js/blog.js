@@ -1,11 +1,22 @@
-$(document).ready(function() {
-  $('div#blog').children('ul').children('li').each(function() {
+function Blog(options) {
+  this.blogItems = options.blogItems;
+  this.blogExcerpt = options.blogExcerpt;
+}
+
+Blog.prototype.init = function() {
+  var _this = this;
+  this.blogItems.click(function() {
     var $li = $(this);
-    $(this).click(function() {
-      if($li.children('p.excerpt').is(':hidden')) {
-        $li.siblings().children('p.excerpt').slideUp().delay(2000);
-        $li.children('p.excerpt').slideDown();
-      }
-    });
+    $li.siblings().find(_this.blogExcerpt).slideUp().delay(2000);
+    $li.find(_this.blogExcerpt).slideToggle();
   });
+};
+
+$(document).ready(function() {
+  var options = {
+    blogItems : $('div#blog ul li'),
+    blogExcerpt : "p.excerpt"
+  },
+    blogObject = new Blog(options);
+  blogObject.init();
 });
