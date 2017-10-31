@@ -195,9 +195,6 @@ body {
 	height: auto;
 }
 
-#nav li ul li:hover {
-	background-color: blue;
-}
 #nav a {
 	color: #fff;
 }
