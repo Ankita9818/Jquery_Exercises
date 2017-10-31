@@ -15,7 +15,7 @@ Blog.prototype.init = function() {
 $(document).ready(function() {
   var options = {
     blogItems : $('div#blog ul li'),
-    blogExcerpt : "p.excerpt"
+    blogExcerpt : 'p.excerpt'
   },
     blogObject = new Blog(options);
   blogObject.init();
