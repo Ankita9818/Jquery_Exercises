@@ -6,7 +6,9 @@ Load.prototype.init = function() {
   var _this = this;
   this.blogHeadlines.each(function() {
     var $currentBlog = $(this),
-      $targetDiv = $('<div class="blogContent"></div>');
+      $targetDiv = $('<div/>', {
+        'class' : 'blogContent'
+      });
     $currentBlog.after($targetDiv).data('blogContent', $targetDiv);
     _this.addclickHandler($currentBlog);
   });
