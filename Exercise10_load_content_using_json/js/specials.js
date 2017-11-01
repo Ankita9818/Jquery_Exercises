@@ -39,8 +39,8 @@ JsonLoader.prototype.bind =function() {
 };
 
 JsonLoader.prototype.displaySpecials = function(response,value) {
-  var daySpecial = response[value];
-  var content = '<h2>' + daySpecial.title + '</h2>';
+  var daySpecial = response[value],
+    content = '<h2>' + daySpecial.title + '</h2>';
   content += '<p>' + daySpecial.text + '</p>';
   content += '<p>' + "Today's color : " + daySpecial.color + '</p>';
   this.$detailsDiv.html(content).addClass('content');
