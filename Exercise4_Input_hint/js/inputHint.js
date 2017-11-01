@@ -15,7 +15,7 @@ InputHint.prototype.init = function() {
 InputHint.prototype.focus = function() {
   var _this = this;
   this.searchInput.bind('focus',function() {
-    if(!_this.searchInput.val() || _this.searchInput.val() == _this.hintText) {
+    if(_this.searchInput.val() == _this.hintText) {
       _this.searchInput.val('').removeClass(_this.classToAdd);
     }
   });
