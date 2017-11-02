@@ -1,48 +1,48 @@
-function Tabs(options) {
-  this.$divModule = options.divmodule;
-  this.classToAdd = options.classToAdd;
+function Tab(option) {
+  this.$module = option.$module;
+  this.className = option.className;
 }
 
-Tabs.prototype.init = function() {
-  this.$divModule.hide();
-  this.$newList = $('<ul/>', {
+Tab.prototype.init = function() {
+  this.$module.hide();
+  this.$list = $('<ul/>', {
     'class' : 'bordered-tab'
   });
-  this.$newList.insertBefore(this.$divModule.eq(0));
+  this.$list.insertBefore(this.$module.eq(0));
   this.createList();
-  this.handleClick();
-  this.$divModule.eq(0).show();                        //To show the first tab by default
-  this.$newList.find('li:first').addClass(this.classToAdd);
+  this.addClickHandler();
+  this.$module.eq(0).show();                        //To show the first tab by default
+  this.$list.find('li:first').addClass(this.className);
 };
 
-Tabs.prototype.createList = function() {
+Tab.prototype.createList = function() {
   var _this = this;
-  this.$divModule.each(function() {
-    var $currentDiv = $(this);
+  this.$module.each(function() {
+    var $currentModule = $(this);
     $('<li/>', {
-      text : $currentDiv.find('h2').text(),
+      text : $currentModule.find('h2').text(),
     })
-      .data('relatedDiv', $currentDiv)
-      .appendTo(_this.$newList);
+      .data('detail', $currentModule)
+      .appendTo(_this.$list);
   });
 };
 
-Tabs.prototype.handleClick = function() {
+Tab.prototype.addClickHandler = function() {
   var _this = this;
-  this.$newList.find('li').click(function() {
+  this.$list.find('li').click(function() {
     var $currentItem = $(this);
-    _this.$divModule.hide();
-    $currentItem.data('relatedDiv').show();
-    $currentItem.addClass(_this.classToAdd)
-      .siblings().removeClass(_this.classToAdd);
+    _this.$module.hide();
+    $currentItem.data('detail').show();
+    $currentItem.addClass(_this.className)
+      .siblings().removeClass(_this.className);
   });
 };
 
 $(function() {
-  var options = {
-    divmodule : $('div.module'),
-    classToAdd : 'current'
+  var option = {
+    $module : $('div.module'),
+    className : 'current'
   },
-    tabbed_nav = new Tabs(options);
-  tabbed_nav.init();
+    tabbedNavigation = new Tab(option);
+  tabbedNavigation.init();
 });
