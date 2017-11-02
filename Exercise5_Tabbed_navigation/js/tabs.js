@@ -1,47 +1,47 @@
 function Tab(option) {
-  this.$module = option.$module;
-  this.className = option.className;
+  this.$modulesDiv = option.$modulesDiv;
+  this.currentClass = option.currentClass;
 }
 
 Tab.prototype.init = function() {
-  this.$module.hide();
-  this.$list = $('<ul/>', {
+  this.$modulesDiv.hide();
+  this.$modulesList = $('<ul/>', {
     'class' : 'bordered-tab'
   });
-  this.$list.insertBefore(this.$module.eq(0));
+  this.$modulesList.insertBefore(this.$modulesDiv.eq(0));
   this.createList();
   this.addClickHandler();
-  this.$module.eq(0).show();                        //To show the first tab by default
-  this.$list.find('li:first').addClass(this.className);
+  this.$modulesDiv.eq(0).show();                        //To show the first tab by default
+  this.$modulesList.find('li:first').addClass(this.currentClass);
 };
 
 Tab.prototype.createList = function() {
   var _this = this;
-  this.$module.each(function() {
+  this.$modulesDiv.each(function() {
     var $currentModule = $(this);
     $('<li/>', {
       text : $currentModule.find('h2').text(),
     })
       .data('detail', $currentModule)
-      .appendTo(_this.$list);
+      .appendTo(_this.$modulesList);
   });
 };
 
 Tab.prototype.addClickHandler = function() {
   var _this = this;
-  this.$list.find('li').click(function() {
+  this.$modulesList.find('li').click(function() {
     var $currentItem = $(this);
-    _this.$module.hide();
+    _this.$modulesDiv.hide();
     $currentItem.data('detail').show();
-    $currentItem.addClass(_this.className)
-      .siblings().removeClass(_this.className);
+    $currentItem.addClass(_this.currentClass)
+      .siblings().removeClass(_this.currentClass);
   });
 };
 
 $(function() {
   var option = {
-    $module : $('div.module'),
-    className : 'current'
+    $modulesDiv : $('div.module'),
+    currentClass : 'current'
   },
     tabbedNavigation = new Tab(option);
   tabbedNavigation.init();
