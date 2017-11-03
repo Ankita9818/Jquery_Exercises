@@ -1,5 +1,6 @@
-function StackContainer() {
+function StackContainer(options) {
   this.stackItemCount = 1;
+  this.highlightClass = options.highlightClass;
 }
 
 StackContainer.prototype.init = function() {
@@ -7,27 +8,34 @@ StackContainer.prototype.init = function() {
   this.addEventHandler();
 };
 
-StackContainer.prototype.createStack = function(){
+StackContainer.prototype.createStack = function() {
+  this.createStackViewItems();
+  $('body').append($(this.$stack_container)).prepend(this.$addButton);
+};
+
+StackContainer.prototype.createStackViewItems = function() {
   this.$addButton = $('<button>', {
     'id':'addBtn',
      text: 'click to add item'
    });
   this.$stack_container = $('<div>', {
-   'id': 'container' }).append(this.$addButton);
-  $('body').append($(this.$stack_container)).prepend(this.$addButton);
-};
-
-StackContainer.prototype.pushDiv = function() {
+    'id': 'container'
+  });
   this.$stack_item = $('<div>', {
    'class': 'stack_item'
   });
-  this.$stack_item.text('item' + this.stackItemCount++)
-  .prependTo(this.$stack_container);
+}
+
+StackContainer.prototype.pushDiv = function() {
+  this.$stack_item.clone()
+    .text('item' + this.stackItemCount++)
+    .prependTo(this.$stack_container);
 };
 
 StackContainer.prototype.popStackItem = function(item) {
-  $('.highlight').removeClass('highlight');
-  item.addClass('highlight');
+  this.$highlightedItem = $('.' + this.highlightClass);
+  this.$highlightedItem.removeClass(this.highlightClass);
+  item.addClass(this.highlightClass);
   if(!item.prevAll().length) {
     item.fadeOut(300, function() {
       console.log('item popped');
@@ -46,7 +54,10 @@ StackContainer.prototype.addEventHandler = function() {
   });
 };
 
-$(function() {
-  var stackContainer = new StackContainer();
+$(function(options) {
+  var options = {
+    highlightClass : 'highlight'
+  },
+    stackContainer = new StackContainer(options);
   stackContainer.init();
 });
