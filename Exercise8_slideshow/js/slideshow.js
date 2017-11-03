@@ -1,4 +1,4 @@
-function Slideshow(options) {
+function Slider(options) {
   this.$slideshow = options.$slideshow;
   this.$slideshowItems = this.$slideshow.find('li');
   this.delay = options.delay;
@@ -6,21 +6,23 @@ function Slideshow(options) {
   this.totalNumberOfItems = this.$slideshowItems.length;
 }
 
-Slideshow.prototype.init = function() {
+Slider.prototype.init = function() {
+  this.startSlideshow();
+  this.playSlideshow();
+};
+
+Slider.prototype.startSlideshow = function() {
   $('body').prepend(this.$slideshow);
   this.$slideIndicator = $('<p/>', {
     'class' : 'indicator'
   });
   this.$slideshow.append(this.$slideIndicator);
   this.$slideshowItems.hide();
-  this.playSlideshow();
 };
 
-Slideshow.prototype.playSlideshow = function() {
-  var itemNumber = 0,
+Slider.prototype.playSlideshow = function() {
+  var itemNumber = -1,
     _this = this;
-  this.$slideshowItems.eq(itemNumber).fadeIn(this.speed);
-  this.indicateCurrentSlide(itemNumber + 1);
   setInterval(function() {
     _this.$slideshowItems.eq(itemNumber).fadeOut(0);
     itemNumber = (itemNumber + 1 >= _this.totalNumberOfItems) ? 0 : itemNumber + 1;
@@ -29,7 +31,7 @@ Slideshow.prototype.playSlideshow = function() {
   }, this.delay);
 };
 
-Slideshow.prototype.indicateCurrentSlide = function(num) {
+Slider.prototype.indicateCurrentSlide = function(num) {
   this.$slideIndicator.text(num + ' / ' + this.totalNumberOfItems);
 };
 
@@ -39,6 +41,6 @@ $(function() {
     delay : 1000,
     speed : 500
   },
-    slideshowObject = new Slideshow(options);
-  slideshowObject.init();
+    sliderObject = new Slider(options);
+  sliderObject.init();
 });
