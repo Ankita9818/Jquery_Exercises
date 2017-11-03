@@ -7,7 +7,10 @@ function InputHint(options) {
 
 InputHint.prototype.init = function() {
   this.hintText = this.searchLabel.remove().text();
-  this.searchInput.attr('value', this.hintText).addClass(this.classToAdd);
+  this.searchInput.attr({
+    'value' : this.hintText,
+    'data-hinttext' : '1'
+  }).addClass(this.classToAdd);
   this.focus();
   this.blur();
 };
@@ -15,7 +18,7 @@ InputHint.prototype.init = function() {
 InputHint.prototype.focus = function() {
   var _this = this;
   this.searchInput.bind('focus',function() {
-    if(_this.searchInput.val() == _this.hintText) {
+    if(_this.searchInput.attr('data-hinttext')) {
       _this.searchInput.val('').removeClass(_this.classToAdd);
     }
   });
@@ -24,8 +27,10 @@ InputHint.prototype.focus = function() {
 InputHint.prototype.blur = function() {
   var _this = this;
   this.searchInput.bind('blur', function() {
+    _this.searchInput.attr('data-hinttext','');
     if(!_this.searchInput.val()) {
       _this.searchInput.val(_this.hintText).addClass(_this.classToAdd);
+      _this.searchInput.attr('data-hinttext','1');
     }
   });
 };
