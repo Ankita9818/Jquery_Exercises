@@ -1,28 +1,28 @@
-function JsonLoader(options) {
+function Special(options) {
   this.divSpecial = options.divSpecial;
-  this.selectElement = options.selectElement;
+  this.daySelectElement = options.daySelectElement;
   this.urlToJsonFile = options.url;
 }
 
-JsonLoader.prototype.init = function() {
+Special.prototype.init = function() {
   this.$detailsDiv = $('<div/>');
   this.$detailsDiv.appendTo(this.divSpecial);
-  this.bind();
+  this.addChangeEventHandler();
   this.divSpecial.find('li.buttons').remove();
 };
 
-JsonLoader.prototype.bind =function() {
+Special.prototype.addChangeEventHandler =function() {
   var _this = this,
     cachedResponse = null;
-  this.selectElement.bind('change',function() {
-    var value = _this.selectElement.val();
+  this.daySelectElement.on('change',function() {
+    var value = _this.daySelectElement.val();
     if(!value) {
       _this.$detailsDiv.empty();
       return;
     }
     if(!cachedResponse) {
       $.ajax({
-        type : 'get',
+        type : 'GET',
         url : _this.urlToJsonFile,
         dataType : 'json',
         success : function(response) {
@@ -38,24 +38,24 @@ JsonLoader.prototype.bind =function() {
   });
 };
 
-JsonLoader.prototype.displaySpecials = function(response,value) {
-  var daySpecial = response[value],
-    content = '<h2>' + daySpecial.title + '</h2>';
-  content += '<p>' + daySpecial.text + '</p>';
-  content += '<p>' + "Today's color : " + daySpecial.color + '</p>';
+Special.prototype.displaySpecials = function(response,value) {
+  var selectedDay = response[value],
+    content = '<h2>' + selectedDay.title + '</h2>';
+  content += '<p>' + selectedDay.text + '</p>';
+  content += '<p>' + "Today's color : " + selectedDay.color + '</p>';
   this.$detailsDiv.html(content).addClass('content');
-  this.$detailsDiv.css('color', daySpecial.color);
+  this.$detailsDiv.css('color', selectedDay.color);
   $('<img/>',{
-    src : daySpecial.image
+    src : selectedDay.image
   }).appendTo(this.$detailsDiv);
 };
 
 $(function(){
   var options = {
     divSpecial : $('#specials'),
-    selectElement :$('#specials select'),
+    daySelectElement :$('#specials select'),
     url : 'json/specials.json'
   },
-    jsonLoaderObject = new JsonLoader(options);
-    jsonLoaderObject.init();
+    specialObject = new Special(options);
+    specialObject.init();
 });
