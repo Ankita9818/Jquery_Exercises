@@ -1,0 +1,36 @@
+.quiz {
+  border :10px solid teal;
+  border-radius: 10px;
+  margin : 50px auto;
+  padding: 20px;
+  text-align: center;
+  width: 60%;
+}
+
+.input {
+  background-color: white;
+  border-color : teal;
+  border-radius : 5px;
+  height: 30px;
+}
+
+.next {
+  background-color: none;
+  font-weight: bold;
+}
+
+.next:hover {
+  background-color: teal;
+  color: white;
+  cursor: pointer;
+}
+
+.score, .green {
+  color: green;
+  font-weight: bold;
+}
+
+.red {
+  color: red;
+  font-weight: bold;
+}
