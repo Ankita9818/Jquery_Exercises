@@ -93,7 +93,7 @@ $(function() {
     $score : '.score',
     $questionNumber : '.qno',
     $result : '.result',
-    numberOfQuestions: 5
+    numberOfQuestions: 20
   },
     quiz = new Quiz(options);
   quiz.init();
