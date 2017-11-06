@@ -48,14 +48,14 @@ Quiz.prototype.askQuestion = function() {
     operand1 : firstOperand,
     operand2 : secondOperand,
     operator : operator,
-    correctresult : result
+    correctResult : result
   };
 };
 
 Quiz.prototype.addClickHandler = function() {
   var _this = this;
   this.$nextBtn.click(function() {
-    if(_this.$answerInput.val() == _this.solutionObject.correctresult) {
+    if(_this.$answerInput.val() == _this.solutionObject.correctResult) {
       _this.score += 1;
       _this.solutionObject.decision = true;
     }
@@ -78,7 +78,7 @@ Quiz.prototype.printScore = function() {
     if(!this.correctAnswers[index].decision) {
       var text = 'Question No. ' + index + ' :-> ' + this.correctAnswers[index].operand1 + ' ' +
         this.correctAnswers[index].operator + ' ' + this.correctAnswers[index].operand2 + " = " +
-        this.correctAnswers[index].correctresult;
+        this.correctAnswers[index].correctResult;
       this.$resultDiv.append($('<p>').text(text));
     }
   }
