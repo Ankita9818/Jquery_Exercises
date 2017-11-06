@@ -27,7 +27,8 @@ Quiz.prototype.askQuestion = function() {
   }
   var firstOperand = Math.floor(Math.random() * 20),
     secondOperand = Math.floor(Math.random() * 20),
-    operator = this.operatorArray[Math.floor(Math.random() * 4)];
+    operator = this.operatorArray[Math.floor(Math.random() * 4)],
+    result;
   this.$questionNumber.html(this.questionNumber);
   switch(operator) {
     case '+' : result = firstOperand + secondOperand;
@@ -48,13 +49,13 @@ Quiz.prototype.askQuestion = function() {
     operand2 : secondOperand,
     operator : operator,
     correctresult : result
-  }
+  };
 };
 
 Quiz.prototype.addClickHandler = function() {
   var _this = this;
   this.$nextBtn.click(function() {
-    if(_this.$answerInput.val() == result) {
+    if(_this.$answerInput.val() == _this.solutionObject.correctresult) {
       _this.score += 1;
       _this.solutionObject.decision = true;
     }
