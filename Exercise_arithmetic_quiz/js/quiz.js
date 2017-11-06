@@ -6,7 +6,7 @@ function Quiz(options) {
   this.$answerInput = this.$quizId.find(options.$answerInput);
   this.$score = this.$quizId.find(options.$score);
   this.$questionNumber = this.$quizId.find(options.$questionNumber);
-  this.$result = this.$quizId.find(options.$result);
+  this.$resultDiv = this.$quizId.find(options.$resultDiv);
   this.numberOfQuestions = options.numberOfQuestions;
   this.operatorArray = ['+','-','*','/'];
   this.score = 0;
@@ -20,7 +20,7 @@ Quiz.prototype.init = function() {
 };
 
 Quiz.prototype.askQuestion = function() {
-  this.$result.hide();
+  this.$resultDiv.hide();
   this.questionNumber++;
   if(this.questionNumber > this.numberOfQuestions) {
     this.printScore();
@@ -70,15 +70,15 @@ Quiz.prototype.addClickHandler = function() {
 
 Quiz.prototype.printScore = function() {
   this.$questionBlock.hide();
-  this.$result.show();
-  this.$result.append($('<p>').text('Your Score is ' + this.score));
-  this.$result.append($('<p>').text('Correct Answers for the questions which you answered wrong'));
+  this.$resultDiv.show();
+  this.$resultDiv.append($('<p>').text('Your Score is ' + this.score));
+  this.$resultDiv.append($('<p>').text('Correct Answers for the questions which you answered wrong'));
   for (var index = 1; index <= this.numberOfQuestions; index++) {
     if(!this.correctAnswers[index].decision) {
       var text = 'Question No. ' + index + ' :-> ' + this.correctAnswers[index].operand1 + ' ' +
         this.correctAnswers[index].operator + ' ' + this.correctAnswers[index].operand2 + " = " +
         this.correctAnswers[index].correctresult;
-      this.$result.append($('<p>').text(text));
+      this.$resultDiv.append($('<p>').text(text));
     }
   }
 };
@@ -92,7 +92,7 @@ $(function() {
     $answerInput : '.answer',
     $score : '.score',
     $questionNumber : '.qno',
-    $result : '.result',
+    $resultDiv : '.result',
     numberOfQuestions: 20
   },
     quiz = new Quiz(options);
