@@ -25,12 +25,7 @@
   cursor: pointer;
 }
 
-.score, .green {
+.score{
   color: green;
-  font-weight: bold;
-}
-
-.red {
-  color: red;
   font-weight: bold;
 }
