@@ -1,3 +1,44 @@
+//Class Question
+function Question(maxNumber) {
+  this.questionNumber = 0;
+  this.maxNumber = maxNumber;
+}
+
+//Function to get a random number
+Question.prototype.getRandomNumber = function(maxNumber) {
+  return Math.floor(Math.random() * maxNumber);
+};
+
+//Function to get operands for the question
+Question.prototype.getOperands = function() {
+  this.questionNumber++;
+    return {
+      firstOperand : this.getRandomNumber(this.maxNumber),
+      secondOperand : this.getRandomNumber(this.maxNumber),
+      operator : OPERATOR_ARRAY[this.getRandomNumber(OPERATOR_ARRAY.length)]
+    };
+};
+
+//Function which returns the question
+Question.prototype.getQuestion = function() {
+  var operands = this.getOperands(),
+  result;
+  switch(operands.operator) {
+    case '+' : result = operands.firstOperand + operands.secondOperand;
+               break;
+    case '-' : result = operands.firstOperand - operands.secondOperand;
+               break;
+    case '*' : result = operands.firstOperand * operands.secondOperand;
+               break;
+    case '/' : result = operands.firstOperand / operands.secondOperand;
+  }
+  return {
+    operands : operands,
+    correctResult : result
+  };
+};
+
+//Class Quiz
 function Quiz(options) {
   this.$quizId = options.$quizId;
   this.$questionBlock = this.$quizId.find(options.$questionBlock);
@@ -8,81 +49,65 @@ function Quiz(options) {
   this.$questionNumber = this.$quizId.find(options.$questionNumber);
   this.$resultDiv = this.$quizId.find(options.$resultDiv);
   this.numberOfQuestions = options.numberOfQuestions;
-  this.operatorArray = ['+','-','*','/'];
   this.score = 0;
-  this.questionNumber = 0;
   this.correctAnswers = [];
+  this.questionObject = new Question(options.maximumNumber);
 }
 
+//Function to initiate quiz
 Quiz.prototype.init = function() {
-  this.askQuestion();
+  this.displayQuestion();
   this.addClickHandler();
 };
 
-Quiz.prototype.askQuestion = function() {
+//Function which gets a question and displays it
+Quiz.prototype.displayQuestion = function() {
   this.$resultDiv.hide();
-  this.questionNumber++;
-  if(this.questionNumber > this.numberOfQuestions) {
-    this.printScore();
+  this.question = this.questionObject.getQuestion();
+  if(this.questionObject.questionNumber > this.numberOfQuestions) {
+    this.displayScore();
   }
-  var firstOperand = Math.floor(Math.random() * 20),
-    secondOperand = Math.floor(Math.random() * 20),
-    operator = this.operatorArray[Math.floor(Math.random() * 4)],
-    result;
-  this.$questionNumber.html(this.questionNumber);
-  switch(operator) {
-    case '+' : result = firstOperand + secondOperand;
-               this.$question.html(firstOperand + ' + ' + secondOperand);
-               break;
-    case '-' : result = firstOperand - secondOperand;
-               this.$question.html(firstOperand + ' - ' + secondOperand);
-               break;
-    case '*' : result = firstOperand * secondOperand;
-               this.$question.html(firstOperand + ' * ' + secondOperand);
-               break;
-    case '/' : result = firstOperand / secondOperand;
-               this.$question.html(firstOperand + ' / ' + secondOperand);
-  }
+  this.$questionNumber.html(this.questionObject.questionNumber);
+  this.$question.html(this.question.operands.firstOperand + ' ' + this.question.operands.operator
+    + ' ' + this.question.operands.secondOperand);
   this.$answerInput.focus();
-  this.solutionObject = {
-    operand1 : firstOperand,
-    operand2 : secondOperand,
-    operator : operator,
-    correctResult : result
-  };
 };
 
+//Function which calculates score and gets next question
 Quiz.prototype.addClickHandler = function() {
   var _this = this;
   this.$nextBtn.click(function() {
-    if(_this.$answerInput.val() == _this.solutionObject.correctResult) {
+    if(_this.$answerInput.val() == _this.question.correctResult) {
       _this.score += 1;
-      _this.solutionObject.decision = true;
+      _this.question.decision = true;
     }
     else {
-      _this.solutionObject.decision = false;
+      _this.question.decision = false;
     }
-    _this.correctAnswers[_this.questionNumber] = _this.solutionObject;
+    _this.correctAnswers.push(_this.question);
     _this.$answerInput.val('');
     _this.$score.html('Your Score is ' + _this.score);
-    _this.askQuestion();
+    _this.displayQuestion();
   });
 };
 
-Quiz.prototype.printScore = function() {
+//Function to display the score to user along with correct answers for the questions answered wrong
+Quiz.prototype.displayScore = function() {
   this.$questionBlock.hide();
-  this.$resultDiv.show();
-  this.$resultDiv.append($('<p>').text('Your Score is ' + this.score));
+  this.$resultDiv.show().append($('<p>').text('Your Score is ' + this.score));
   this.$resultDiv.append($('<p>').text('Correct Answers for the questions which you answered wrong'));
-  for (var index = 1; index <= this.numberOfQuestions; index++) {
+  for (var index = 0; index < this.numberOfQuestions; index++) {
     if(!this.correctAnswers[index].decision) {
-      var text = 'Question No. ' + index + ' :-> ' + this.correctAnswers[index].operand1 + ' ' +
-        this.correctAnswers[index].operator + ' ' + this.correctAnswers[index].operand2 + " = " +
-        this.correctAnswers[index].correctResult;
+      var text = 'Question No. ' + (index + 1) + ' :-> ' + this.correctAnswers[index].operands.firstOperand + ' ' +
+        this.correctAnswers[index].operands.operator + ' ' + this.correctAnswers[index].operands.secondOperand
+        + " = " + this.correctAnswers[index].correctResult;
       this.$resultDiv.append($('<p>').text(text));
     }
   }
 };
+
+//Constant for operators
+const OPERATOR_ARRAY = ['+','-','*','/'];
 
 $(function() {
   var options = {
@@ -94,7 +119,8 @@ $(function() {
     $score : '.score',
     $questionNumber : '.qno',
     $resultDiv : '.result',
-    numberOfQuestions: 20
+    numberOfQuestions: 20,
+    maximumNumber : 20
   },
     quiz = new Quiz(options);
   quiz.init();
