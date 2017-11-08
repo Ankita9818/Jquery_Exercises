@@ -4,14 +4,15 @@ function Slider(options) {
   this.delay = options.delay;
   this.speed = options.speed;
   this.totalNumberOfItems = this.$slideshowItems.length;
+  this.itemNumber = -1
 }
 
 Slider.prototype.init = function() {
-  this.startSlideshow();
-  this.playSlideshow();
+  this.attachIndicators();
+  this.initiateSlideshow();
 };
 
-Slider.prototype.startSlideshow = function() {
+Slider.prototype.attachIndicators = function() {
   $('body').prepend(this.$slideshow);
   this.$slideIndicator = $('<p/>', {
     'class' : 'indicator'
@@ -20,15 +21,18 @@ Slider.prototype.startSlideshow = function() {
   this.$slideshowItems.hide();
 };
 
-Slider.prototype.playSlideshow = function() {
-  var itemNumber = -1,
-    _this = this;
+Slider.prototype.initiateSlideshow = function() {
+  var _this = this;
   setInterval(function() {
-    _this.$slideshowItems.eq(itemNumber).fadeOut(0);
-    itemNumber = (itemNumber + 1 >= _this.totalNumberOfItems) ? 0 : itemNumber + 1;
-    _this.$slideshowItems.eq(itemNumber).fadeIn(_this.speed);
-    _this.indicateCurrentSlide(itemNumber + 1);
+    _this.playSlideshow();
   }, this.delay);
+};
+
+Slider.prototype.playSlideshow = function() {
+  this.$slideshowItems.eq(this.itemNumber).fadeOut(0);
+  this.itemNumber = (this.itemNumber + 1 >= this.totalNumberOfItems) ? 0 : this.itemNumber + 1;
+  this.$slideshowItems.eq(this.itemNumber).fadeIn(this.speed);
+  this.indicateCurrentSlide(this.itemNumber + 1);
 };
 
 Slider.prototype.indicateCurrentSlide = function(num) {
