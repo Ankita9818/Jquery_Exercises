@@ -62,12 +62,12 @@ Quiz.prototype.start = function() {
   this.evaluateResponse();
 };
 
-//Function which creates a question object
+//Function which creates an object of Question class
 Quiz.prototype.createQuestions = function() {
   this.questionObject = new Question(this.maxNumber);
 };
 
-//Function which displays question and finally result screen
+//Function which displays question and result screen at the ends
 Quiz.prototype.displayQuestionOrResult = function() {
   (this.questionObject.questionNumber < this.numberOfQuestions) ? this.askQuestion() : this.displayFinalScreen();
 };
@@ -99,6 +99,11 @@ Quiz.prototype.displayFinalScreen = function() {
   this.$questionBlock.hide();
   this.$resultDiv.show().append(this.$score);
   this.$resultDiv.append($('<p>').text('Correct Answers for the questions which you answered wrong'));
+  this.displayCorrectAnswers();
+};
+
+//Function which displays correct answers for the questions answered wrong by the user
+Quiz.prototype.displayCorrectAnswers = function() {
   for (var index = 0; index < this.numberOfQuestions; index++) {
     if(!this.correctAnswers[index].decision) {
       var text = 'Question No. ' + (index + 1) + ' :-> ' + this.correctAnswers[index].operands.firstOperand + ' ' +
