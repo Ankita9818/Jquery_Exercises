@@ -6,7 +6,6 @@ function CountryTransferManager(options) {
 CountryTransferManager.prototype.init = function() {
   this.dragAndDropCountries(this.finalSelectBox,this.initialSelectBox);
   this.dragAndDropCountries(this.initialSelectBox,this.finalSelectBox);
-
 };
 
 CountryTransferManager.prototype.dragAndDropCountries = function(sourceSelectbox, destinationSelectbox) {
