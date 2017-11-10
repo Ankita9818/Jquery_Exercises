@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  margin:35vh auto;
+  max-width: 500px;
+}
+
+.selectboxes {
+  min-width: 250px;
+}
+
+.buttonsBlock {
+  text-align: center;
+  width: 130px;
+}
+
+.btns {
+  background-color: rgb(236,107,44);
+  border-radius:4px;
+  border: none;
+  box-shadow: inset -1px -1px 5px 0px rgba(0,0,0,0.5);
+  color: white;
+  margin: 5px auto;
+  min-width: 80px;
+  padding: 10px 0;
+}
+
+.icons {
+  margin-left: 3px;
+  margin-right: 3px;
+}
