@@ -7,14 +7,14 @@ CountryTransferManager.prototype.init = function() {
   this.dragAndDropCountries();
 };
 
-CountryTransferManager.prototype.dragAndDropCountries = function(selectBox) {
+CountryTransferManager.prototype.dragAndDropCountries = function() {
   this.$countrySelectBox.children().draggable({
-    cancel: false,
-    containment: this.$parentContainer,
-    helper: 'clone'
+    cancel : false,
+    containment : this.$parentContainer,
+    helper : 'clone'
   });
   this.$countrySelectBox.droppable({
-    drop: function (event, ui) {
+    drop : function (event, ui) {
       $(this).append(ui.draggable);
     }
   });
