@@ -8,7 +8,7 @@ function ProductList(options) {
 
 ProductList.prototype.init = function() {
   this.loadJsonData();
-  this.addClickEventHandler();
+  this.addChangeEventHandler();
 };
 
 ProductList.prototype.loadJsonData = function(){
@@ -36,7 +36,7 @@ ProductList.prototype.displayAllProducts = function() {
   this.$productContainer.append(this.allProducts);
 };
 
-ProductList.prototype.addClickEventHandler = function() {
+ProductList.prototype.addChangeEventHandler = function() {
   var _this = this;
   this.$filterBox.on("change", function() {
     var $filterElements = _this.$productContainer.find("[data-type='productimage']");
@@ -52,7 +52,7 @@ ProductList.prototype.filterProducts = function(filterElements) {
     var $currentFilter = $(this),
       checkedInput = $currentFilter.find("input[data-category='" + $currentFilter.attr("id") + "']:checked");
     _this.filteredProducts = [];
-    if(checkedInput.length > 0) {
+    if(checkedInput.length) {
       _this.saveFilteredProductsInArray(checkedInput, $currentFilter);
       filterElements = filterElements.filter(_this.filteredProducts.join());
     }
