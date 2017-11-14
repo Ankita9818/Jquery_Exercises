@@ -7,30 +7,30 @@ body {
   box-sizing: border-box;
 }
 
-.filter {
-  height: 100%;
-  padding: 10px;
-  width: 25%;
+.categories {
+  float: left;
+  width: 20%;
 }
 
-.block {
-  display: inline-block;
-  vertical-align: top;
+.filter-div {
+  color: green;
+  margin: 10px;
+  padding: 5px;
 }
 
-#product {
-  width: 70%;
+#product-container {
+  float: left;
+  margin: 10px;
+  width: 75%;
 }
 
-#logo {
-  font-size: 400%;
-  margin: 0 0 40px 0;
-  text-align: center;
+#product-container div {
+  float: left;
+  margin: 10px;
+  padding: 5px;
 }
 
-.pink {
-  text-decoration: underline;
-  font-weight: bold;
-  color: pink;
+#product-container div img {
   border: 1px solid black;
+  max-width: 80%;
 }

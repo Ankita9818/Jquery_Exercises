@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>jQuery Fundamentals :: Home</title>
-	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+  <title>Product Store</title>
+  <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<div id="header">
-		<div id="logo" rel="logo">jQuery Fundamentals</div>
-	</div>
-	<div class="filter block">
-		<h3>Brands</h3>
-		<input type="checkbox" name="brands" data-key="brand" data-value="BRAND A" value="brandA">Brand A <br />
-		<input type="checkbox" name="brands" data-key="brand" data-value="BRAND B" value="brandB">Brand B <br />
-		<input type="checkbox" name="brands" data-key="brand" data-value="BRAND C" value="brandC">Brand C <br />
-		<input type="checkbox" name="brands" data-key="brand" data-value="BRAND D" value="brandD">Brand D <br />
-		<h3>Colors</h3>
-		<input type="checkbox" name="colors" data-key="color" data-value="Red" value="red">Red <br />
-		<input type="checkbox" name="colors" data-key="color" data-value="Blue" value="blue">Blue <br />
-		<input type="checkbox" name="colors" data-key="color" data-value="Green" value="green">Green <br />
-		<input type="checkbox" name="colors" data-key="color" data-value="Yellow" value="yellow">Yellow <br />
-		<h3>Availability</h3>
-		<input type="checkbox" name="availablity" data-key="sold_out" data-value="0" value="availablity">Available Products <br />
-	</div>
-	<div id="product" class="block">
-	</div>
-<script src="libs/jquery-3.2.1.js"></script>
-<script type="text/javascript" src="js/product_display.js"></script>
+  <div class="categories">
+    <div class="filter-div" id="brand">
+      <h3>Brands</h3>
+      <label><input type="checkbox" class="filter-category" name="brand" data-category="brand" data-brand="BRAND A"/> Brand A</label><br />
+      <label><input type="checkbox" class="filter-category" name="brand" data-category="brand" data-brand="BRAND B"/> Brand B</label><br />
+      <label><input type="checkbox" class="filter-category" name="brand" data-category="brand" data-brand="BRAND C"/> Brand C</label><br />
+      <label><input type="checkbox" class="filter-category" name="brand" data-category="brand" data-brand="BRAND D"/> Brand D</label><br />
+    </div>
+    <div class="filter-div" id="color">
+      <h3>Colors</h3>
+      <label><input type="checkbox" class="filter-category" name="color" data-category="color" data-color="Red"/> Red</label><br />
+      <label><input type="checkbox" class="filter-category" name="color" data-category="color" data-color="Yellow"/> Yellow</label><br />
+      <label><input type="checkbox" class="filter-category" name="color" data-category="color" data-color="Green"/> Green</label><br />
+      <label><input type="checkbox" class="filter-category" name="color" data-category="color" data-color="Blue"/> Blue</label><br />
+    </div>
+    <div class="filter-div" id="sold_out">
+      <h3>Availability</h3>
+      <label><input type="checkbox" class="filter-category" name="sold_out" data-category="sold_out" data-sold_out="0"/> Available</label><br />
+      <label><input type="checkbox" class="filter-category" name="sold_out" data-category="sold_out" data-sold_out="1"/> Sold Out</label><br />
+    </div>
+  </div>
+  <div class="product-front">
+    <div id="product-container"></div>
+  </div>
+<script src="lib/jquery-3.2.1.js"></script>
+<script src="js/product_list.js"></script>
 </body>
 </html>
