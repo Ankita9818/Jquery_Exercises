@@ -27,8 +27,8 @@ ProductList.prototype.loadJsonData = function() {
 };
 
 ProductList.prototype.storeAllProducts = function(index, currentResponseObject) {
-  this.allProducts.push("<div id='" + (index + 1) + "' data-type='productimage' data-brand = '" +
-    currentResponseObject.brand + "' data-color = '" + currentResponseObject.color + "' data-sold_out = '" +
+  this.allProducts.push("<div id='" + (index + 1) + "' data-type='productimage' data-brands = '" +
+    currentResponseObject.brand + "' data-colors = '" + currentResponseObject.color + "' data-availability = '" +
     currentResponseObject.sold_out + "'><img src=images/" + currentResponseObject.url + " /></div>");
 };
 
@@ -50,7 +50,7 @@ ProductList.prototype.filterProducts = function(filterElements) {
   var _this = this;
   this.$filterBox.each(function() {
     var $currentFilter = $(this),
-      checkedInput = $currentFilter.find("input[data-category='" + $currentFilter.attr("id") + "']:checked");
+      checkedInput = $currentFilter.find("input[data-category='" + $currentFilter.attr("data-id") + "']:checked");
     _this.filteredProducts = [];
     if(checkedInput.length) {
       _this.saveFilteredProductsInArray(checkedInput, $currentFilter);
@@ -63,7 +63,7 @@ ProductList.prototype.filterProducts = function(filterElements) {
 ProductList.prototype.saveFilteredProductsInArray = function(checkedFilter, currentFilterBox) {
   var _this = this;
   checkedFilter.each(function() {
-    var id = currentFilterBox.attr('id');
+    var id = currentFilterBox.attr('data-id');
     _this.filteredProducts.push("[data-" + id + " = '" + $(this).attr('data-' + id) + "']");
   });
 };
@@ -71,7 +71,7 @@ ProductList.prototype.saveFilteredProductsInArray = function(checkedFilter, curr
 $(function() {
   var options = {
     $productContainer : $("#product-container"),
-    $filterBox : $(".categories .filter-div"),
+    $filterBox : $(".filter-container .filter-div"),
     url : 'json/product.json'
   },
     productFilter = new ProductList(options);
