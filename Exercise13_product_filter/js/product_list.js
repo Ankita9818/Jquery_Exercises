@@ -9,6 +9,7 @@ function ProductList(options) {
 ProductList.prototype.init = function() {
   this.loadJsonData();
   this.addChangeEventHandler();
+  this.availabilityRadioCheckUncheckHandler();
 };
 
 ProductList.prototype.loadJsonData = function() {
@@ -58,6 +59,22 @@ ProductList.prototype.filterProducts = function(filterElements) {
     }
   });
   return filterElements;
+};
+
+ProductList.prototype.availabilityRadioCheckUncheckHandler = function() {
+  var _this = this;
+  this.ctr = 0;
+  $('input:radio').on('click', function() {
+    if(_this.ctr) {
+      $(this).prop('checked', false);
+      _this.ctr = 0;
+    }
+    else {
+      $(this).prop('checked', true);
+      _this.ctr = 1;
+    }
+    $(this).trigger('change');
+  });
 };
 
 ProductList.prototype.saveFilteredProductsInArray = function(checkedFilter, currentFilterBox) {

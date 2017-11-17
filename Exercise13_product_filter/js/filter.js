@@ -50,7 +50,7 @@ FilterList.prototype.createFilterLayout = function(filter) {
 FilterList.prototype.createCheckboxFilter = function(filter) {
   for(var index = 0; index < filter.filter_values.length; index++) {
     var tempLabel = $('<label>', {
-      text : filter.filter_values[index],
+      text : filter.filter_values[index].toLowerCase(),
       'class' : 'filterElement'
     }),
       data_attr = 'data-' + filter.filter_name.toLowerCase(),
@@ -60,6 +60,24 @@ FilterList.prototype.createCheckboxFilter = function(filter) {
         'data-category' : filter.filter_name.toLowerCase(),
         value : filter.filter_values[index]
       }).attr(data_attr, filter.filter_values[index]);
+    $(tempLabel).prepend(tempFilter);
+    this.$filterBox.append(tempLabel);
+  }
+};
+
+FilterList.prototype.createRadioFilter = function(filter) {
+  for(var index = 0; index < filter.filter_values.length; index++) {
+    var tempLabel = $('<label>', {
+      text : filter.filter_values[index],
+      'class' : 'filterElement'
+    }),
+      data_attr = 'data-' + filter.filter_name.toLowerCase(),
+      tempFilter = $('<input>', {
+        type : 'radio',
+        name : filter.filter_name.toLowerCase(),
+        'data-category' : filter.filter_name.toLowerCase(),
+        value : filter.filter_values[index]
+      }).attr(data_attr, (filter.filter_values[index] | 0));
     $(tempLabel).prepend(tempFilter);
     this.$filterBox.append(tempLabel);
   }
@@ -79,24 +97,6 @@ FilterList.prototype.createSelectFilter = function(filter) {
     tempSelectFilter.append(tempOptions);
   }
   this.$filterBox.append(tempSelectFilter);
-};
-
-FilterList.prototype.createRadioFilter = function(filter) {
-  for(var index= 0; index < filter.filter_values.length; index++) {
-    var tempLabel = $('<label>', {
-      text : filter.filter_values[index],
-      'class' : 'filterElement'
-    }),
-      data_attr = 'data-' + filter.filter_name.toLowerCase(),
-      tempFilter = $('<input>', {
-        type : 'checkbox',
-        name : filter.filter_name.toLowerCase(),
-        'data-category' : filter.filter_name.toLowerCase(),
-        value : filter.filter_values[index]
-      }).attr(data_attr, '0');
-    $(tempLabel).prepend(tempFilter);
-    this.$filterBox.append(tempLabel);
-  }
 };
 
 $(function() {
