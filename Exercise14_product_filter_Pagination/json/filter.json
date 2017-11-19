@@ -1,0 +1,38 @@
+[
+  {
+    "filter_name": "Brands",
+    "filter_type": "checkbox",
+    "filter_values": [
+      "BRAND A",
+      "BRAND B",
+      "BRAND C",
+      "BRAND D"
+    ]
+  },
+  {
+    "filter_name": "Colors",
+    "filter_type": "checkbox",
+    "filter_values": [
+      "Red",
+      "Blue",
+      "Yellow",
+      "Green"
+    ]
+  },
+  {
+    "filter_name": "Availability",
+    "filter_type": "radio",
+    "filter_values": [
+      "Available_Products"
+    ]
+  },
+  {
+    "filter_name": "Pagination",
+    "filter_type": "select",
+    "filter_values": [
+      "3",
+      "6",
+      "9"
+    ]
+  }
+]
