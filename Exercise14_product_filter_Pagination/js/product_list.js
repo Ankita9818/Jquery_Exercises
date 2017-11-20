@@ -46,6 +46,7 @@ ProductList.prototype.displayAllProducts = function() {
   this.filteredElements = this.allProducts;
   this.$productContainer.append(this.allProducts);
   this.bindPageClickEvent();
+  this.createPaginationBar(this.allProducts);
   this.$paginationElement.trigger('change');
 };
 
@@ -53,13 +54,15 @@ ProductList.prototype.displayAllProducts = function() {
 ProductList.prototype.addChangeEventHandler = function() {
   var _this = this;
   this.$filterBox.on("change", function(event) {
-    if (event.originalEvent !== undefined) {
-      _this.selectedPage = 1;
-    }
+    $('[data-page='+_this.selectedPage+']').addClass('highlight');
     _this.filteredElements = _this.$productContainer.find("[data-type='productimage']");
     _this.filteredElements.hide();
     _this.filteredElements = _this.filterProducts(_this.filteredElements);
-    _this.createPaginationBar(_this.filteredElements);
+    if(event.originalEvent !== undefined) {
+      _this.selectedPage = 1;
+      _this.createPaginationBar(_this.filteredElements);
+      $('[data-page='+_this.selectedPage+']').addClass('highlight');
+    }
     _this.filteredElements = _this.applyPagination(_this.filteredElements);
     _this.filteredElements.show();
   });
@@ -142,6 +145,7 @@ ProductList.prototype.bindPageClickEvent = function() {
       $this = '';
   this.$paginationBar.on('click', '[data-page]', function() {
     $this = $(this);
+    debugger
     $this.addClass('highlight').siblings().removeClass('highlight');
     _this.selectedPage = $this.data('page');
     _this.$paginationElement.trigger('change');
