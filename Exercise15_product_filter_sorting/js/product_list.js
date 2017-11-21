@@ -3,7 +3,6 @@ function ProductList(options) {
   this.$productContainer = options.$productContainer;
   this.$filterBox = options.$filterBox;
   this.urlToJsonFile = options.url;
-  this.filterCondition = [];
   this.allProducts = [];
   this.selectedPage = 1;
   this.currentViewableProducts = [];
@@ -82,7 +81,7 @@ ProductList.prototype.addChangeEventHandler = function() {
 //Function to save filtered products in an array
 ProductList.prototype.moveFilteredProductsInArray = function(elements) {
   var elementsArray = [];
-  $.each(elements,function() {
+  $.each(elements, function() {
       elementsArray.push(this);
   });
 return elementsArray;
@@ -130,22 +129,6 @@ ProductList.prototype.saveFilteredProductsInArray = function(checkedFilter, curr
   });
 };
 
-//Function which sorts the products
-ProductList.prototype.applySorting = function(filterElements) {
-  var sortCriteria = this.$sortBy.val();
-  filterElements.sort(function(product1, product2) {
-    var sortCondition = (sortCriteria != 'id') ?
-      $(product1).attr('data-' + sortCriteria) > $(product2).attr('data-' + sortCriteria) :
-      parseInt($(product1).attr('data-' + sortCriteria)) > parseInt($(product2).attr('data-' + sortCriteria));
-    if (sortCondition) {
-      return 1;
-    } else {
-      return -1;
-    }
-  });
-  return filterElements;
-};
-
 //Function to create the pagination bar
 ProductList.prototype.createPaginationBar = function(filterElements) {
   this.$paginationBar.empty();
@@ -184,6 +167,22 @@ ProductList.prototype.bindPageClickEvent = function() {
     _this.selectedPage = $this.data('page');
     _this.$paginationElement.trigger('change');
   });
+};
+
+//Function which sorts the products
+ProductList.prototype.applySorting = function(filterElements) {
+  var sortCriteria = this.$sortBy.val();
+  filterElements.sort(function(product1, product2) {
+    var sortCondition = (sortCriteria != 'id') ?
+      $(product1).attr('data-' + sortCriteria) > $(product2).attr('data-' + sortCriteria) :
+      parseInt($(product1).attr('data-' + sortCriteria)) > parseInt($(product2).attr('data-' + sortCriteria));
+    if (sortCondition) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+  return filterElements;
 };
 
 $(function() {
