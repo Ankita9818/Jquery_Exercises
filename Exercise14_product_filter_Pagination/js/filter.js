@@ -42,7 +42,10 @@ FilterList.prototype.createPaginationBar = function() {
 
 //FUNCTION TO create layout of filters
 FilterList.prototype.createFilterLayout = function(filter) {
-  this.$filterBox = $('<div>').addClass('filter-div').attr('data-id',filter.filter_name.toLowerCase());
+  this.$filterBox = $('<div>', {
+    'class' : 'filter-div',
+    'data-id' : filter.filter_name.toLowerCase()
+  });
   var $heading = $('<h4>').html(filter.filter_name),
     _this = this;
   this.$filterBox.append($heading);
