@@ -21,7 +21,7 @@
   },
   {
     "filter_name": "Availability",
-    "filter_type": "radio",
+    "filter_type": "checkbox",
     "filter_values": [
       "Available_Products"
     ]

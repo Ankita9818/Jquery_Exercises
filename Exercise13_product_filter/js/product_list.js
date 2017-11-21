@@ -11,7 +11,6 @@ function ProductList(options) {
 ProductList.prototype.init = function() {
   this.loadJsonData();
   this.addChangeEventHandler();
-  this.availabilityRadioCheckUncheckHandler();
 };
 
 //Function to get products data from json file
@@ -32,9 +31,18 @@ ProductList.prototype.loadJsonData = function() {
 
 //Function to store all products
 ProductList.prototype.storeAllProducts = function(index, currentResponseObject) {
-  this.allProducts.push("<div id='" + (index + 1) + "' data-type='productimage' data-brands = '" +
-    currentResponseObject.brand + "' data-colors = '" + currentResponseObject.color + "' data-availability = '" +
-    currentResponseObject.sold_out + "'><img src=images/" + currentResponseObject.url + " /></div>");
+  var productObject = $('<div>', {
+    id : (index + 1),
+    'data-type' : 'productimage',
+    'data-brands' : currentResponseObject.brand,
+    'data-colors' : currentResponseObject.color,
+    'data-availability' : currentResponseObject.sold_out
+  }),
+    productImageObject = $('<img>', {
+      src : "images/" + currentResponseObject.url
+    });
+  productObject.append(productImageObject);
+  this.allProducts.push(productObject);
 };
 
 //Function to display all products
@@ -58,7 +66,8 @@ ProductList.prototype.filterProducts = function(filterElements) {
   var _this = this;
   this.$filterBox.each(function() {
     var $currentFilter = $(this),
-      checkedInput = $currentFilter.find("input[data-category='" + $currentFilter.attr("data-id") + "']:checked");
+      selector = "input[data-category='" + $currentFilter.attr("data-id") + "']:checked";
+      checkedInput = $currentFilter.find(selector);
     _this.filteredProducts = [];
     if(checkedInput.length) {
       _this.saveFilteredProductsInArray(checkedInput, $currentFilter);
@@ -66,23 +75,6 @@ ProductList.prototype.filterProducts = function(filterElements) {
     }
   });
   return filterElements;
-};
-
-//Function to check uncheck radio button on clicking
-ProductList.prototype.availabilityRadioCheckUncheckHandler = function() {
-  var _this = this;
-  this.flag = 0;
-  $('input:radio').on('click', function() {
-    if(_this.flag) {
-      $(this).prop('checked', false);
-      _this.flag = 0;
-    }
-    else {
-      $(this).prop('checked', true);
-      _this.flag = 1;
-    }
-    $(this).trigger('change');
-  });
 };
 
 //Function to save the constraints to filter products
