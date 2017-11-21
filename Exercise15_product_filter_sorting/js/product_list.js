@@ -38,6 +38,7 @@ ProductList.prototype.loadJsonData = function() {
 ProductList.prototype.storeAllProducts = function(index, currentResponseObject) {
   var productObject = $('<div>', {
     id : (index + 1),
+    'data-id' : (index + 1),
     'data-type' : 'productimage',
     'data-brands' : currentResponseObject.brand,
     'data-colors' : currentResponseObject.color,
@@ -132,15 +133,16 @@ ProductList.prototype.saveFilteredProductsInArray = function(checkedFilter, curr
 //Function which sorts the products
 ProductList.prototype.applySorting = function(filterElements) {
   var sortCriteria = this.$sortBy.val();
-  if(sortCriteria !='id') {
-    filterElements.sort(function(product1, product2) {
-      if ($(product1).attr('data-' + sortCriteria) > $(product2).attr('data-' + sortCriteria)) {
-        return 1;
-      } else {
-        return -1;
-      }
-    });
-  }
+  filterElements.sort(function(product1, product2) {
+    var sortCondition = (sortCriteria != 'id') ?
+      $(product1).attr('data-' + sortCriteria) > $(product2).attr('data-' + sortCriteria) :
+      parseInt($(product1).attr('data-' + sortCriteria)) > parseInt($(product2).attr('data-' + sortCriteria));
+    if (sortCondition) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
   return filterElements;
 };
 
