@@ -59,14 +59,6 @@ ProductList.prototype.displayAllProducts = function() {
   this.$paginationElement.trigger('change');
 };
 
-ProductList.prototype.moveFilteredProductsInArray = function(elements) {
-  var elementsArray = [];
-  $.each(elements,function() {
-      elementsArray.push(this);
-  });
-return elementsArray;
-};
-
 //Function to handle change event
 ProductList.prototype.addChangeEventHandler = function() {
   var _this = this;
@@ -86,6 +78,16 @@ ProductList.prototype.addChangeEventHandler = function() {
   });
 };
 
+//Function to save filtered products in an array
+ProductList.prototype.moveFilteredProductsInArray = function(elements) {
+  var elementsArray = [];
+  $.each(elements,function() {
+      elementsArray.push(this);
+  });
+return elementsArray;
+};
+
+//Function to display filtered products
 ProductList.prototype.displayFilteredProducts = function(elements) {
   var _this = this;
   $.each(elements, function() {
@@ -93,6 +95,7 @@ ProductList.prototype.displayFilteredProducts = function(elements) {
   });
 }
 
+//Function to create pagination bar if a filter is checked
 ProductList.prototype.createPaginationForCheckedFilter = function(event) {
   if(event.originalEvent !== undefined) {
     this.selectedPage = 1;
@@ -126,6 +129,7 @@ ProductList.prototype.saveFilteredProductsInArray = function(checkedFilter, curr
   });
 };
 
+//Function which sorts the products
 ProductList.prototype.applySorting = function(filterElements) {
   var sortCriteria = this.$sortBy.val();
   if(sortCriteria !='id') {
