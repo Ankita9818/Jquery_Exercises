@@ -1,7 +1,8 @@
 //constructor for Products List
 function ProductList(options) {
-  this.$productContainer = options.$productContainer;
-  this.$filterBox = options.$filterBox.find(CONSTANTS.FILTERSELECTOR);
+  this.$productContainer = options.$productContainer
+  this.$filterBox = options.$filterBox.find(options.filterSelector);
+  this.productSelector = options.productSelector;
   this.url = options.url;
   this.imageFolder  = options.imageFolder;
   this.allProducts = [];
@@ -55,7 +56,7 @@ ProductList.prototype.displayProducts = function(products) {
 ProductList.prototype.addChangeEventHandler = function() {
   var _this = this;
   this.$filterBox.on("change", function() {
-    var $filterElements = _this.$productContainer.find(CONSTANTS.PRODUCTSELECTOR);
+    var $filterElements = _this.$productContainer.find(_this.productSelector);
     $filterElements.hide();
     $filterElements = _this.filterProducts($filterElements);
     $filterElements.show();
@@ -87,18 +88,14 @@ ProductList.prototype.getFilterCondition = function(checkedFilter, currentFilter
   });
 };
 
-var CONSTANTS = {
-  PRODUCTSELECTOR : "[data-type='productimage']",
-  FILTERSELECTOR : "[data-name='filter-div']"
-};
-Object.freeze(CONSTANTS);
-
 $(function() {
   var options = {
     $productContainer : $("[data-id='product-container']"),
     $filterBox : $("[data-id='filter-container']"),
     url : 'json/product.json',
     imageFolder : "images/",
+    productSelector : "[data-type='productimage']",
+    filterSelector : "[data-name='filter-div']"
   },
     productFilter = new ProductList(options);
   productFilter.init();
