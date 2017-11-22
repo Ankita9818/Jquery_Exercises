@@ -33,16 +33,17 @@ FilterList.prototype.createFilters = function() {
 FilterList.prototype.createFilterLayout = function(filter) {
   this.$filterBox = $('<div>', {
     'class' : 'filter-div',
-    'data-id' : filter.filter_name.toLowerCase()
+    'data-name' : 'filter-div'
   });
+  this.$filterBox.data('category', filter.filter_name.toLowerCase());
   var $heading = $('<h4>').html(filter.filter_name),
-    _this = this;
+      _this = this;
   this.$filterBox.append($heading);
   switch(filter.filter_type) {
     case 'checkbox' : _this.createCheckboxFilter(filter);
                       break;
-    case 'select' : _this.createSelectFilter(filter);
-                    break;
+    case 'select'   : _this.createSelectFilter(filter);
+                      break;
   }
   this.$filterContainer.append(this.$filterBox);
 };
@@ -51,15 +52,15 @@ FilterList.prototype.createFilterLayout = function(filter) {
 FilterList.prototype.createCheckboxFilter = function(filter) {
   for(var index = 0; index < filter.filter_values.length; index++) {
     var tempLabel = $('<label>', {
-      text : filter.filter_values[index].toLowerCase(),
+      'text' : filter.filter_values[index].toLowerCase(),
       'class' : 'filterElement'
     }),
       data_attr = 'data-' + filter.filter_name.toLowerCase(),
       tempFilter = $('<input>', {
-        type : 'checkbox',
-        name : filter.filter_name.toLowerCase(),
+        'type' : 'checkbox',
+        'name' : filter.filter_name.toLowerCase(),
         'data-category' : filter.filter_name.toLowerCase(),
-        value : filter.filter_values[index]
+        'value' : filter.filter_values[index]
       }).attr(data_attr, filter.filter_values[index]);
       if(filter.filter_values.length == 1) {
         tempFilter.attr(data_attr, (filter.filter_values[index] | 0));
@@ -72,14 +73,14 @@ FilterList.prototype.createCheckboxFilter = function(filter) {
 //Function to create pagination select box
 FilterList.prototype.createSelectFilter = function(filter) {
   var tempSelectFilter = $('<select>', {
-    name : filter.filter_name.toLowerCase(),
+    'name' : filter.filter_name.toLowerCase(),
     'data-category' : filter.filter_name.toLowerCase()
   });
   for(var index = 0; index < filter.filter_values.length; index++) {
     var tempOptions = $('<option>', {
-      id : filter.filter_values[index],
-      value : filter.filter_values[index],
-      text : filter.filter_values[index]
+      'id' : filter.filter_values[index],
+      'value' : filter.filter_values[index],
+      'text' : filter.filter_values[index]
     });
     tempSelectFilter.append(tempOptions);
   }
@@ -88,8 +89,8 @@ FilterList.prototype.createSelectFilter = function(filter) {
 
 $(function() {
   var options = {
-    $productContainer : $("#product-container"),
-    $filterContainer : $(".filter-container"),
+    $productContainer : $("[data-id='product-container']"),
+    $filterContainer : $("[data-id='filter-container']"),
     url : 'json/filter.json'
   },
     filter = new FilterList(options);

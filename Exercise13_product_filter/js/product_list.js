@@ -1,9 +1,9 @@
 //constructor for Products List
 function ProductList(options) {
   this.$productContainer = options.$productContainer;
-  this.$filterBox = options.$filterBox;
-  this.urlToJsonFile = options.url;
-  this.filteredProducts = [];
+  this.$filterBox = options.$filterBox.find(filterSelector);
+  this.url = options.url;
+  this.imageFolder  = options.imageFolder;
   this.allProducts = [];
 }
 
@@ -18,43 +18,44 @@ ProductList.prototype.loadJsonData = function() {
   var _this = this;
   $.ajax({
     type : 'GET',
-    url : this.urlToJsonFile,
+    url : this.url,
     dataType : 'json',
     success : function(response) {
       $.each(response, function(index) {
-        _this.storeAllProducts(index, this);
+        var product = _this.buildProduct(index, this);
+        _this.allProducts.push(product);
       });
-      _this.displayAllProducts();
+      _this.displayProducts(_this.allProducts);
     }
   });
 };
 
 //Function to store all products
-ProductList.prototype.storeAllProducts = function(index, currentResponseObject) {
+ProductList.prototype.buildProduct = function(index, product) {
   var productObject = $('<div>', {
-    id : (index + 1),
+    'id' : index,
     'data-type' : 'productimage',
-    'data-brands' : currentResponseObject.brand,
-    'data-colors' : currentResponseObject.color,
-    'data-availability' : currentResponseObject.sold_out
+    'data-brands' : product.brand,
+    'data-colors' : product.color,
+    'data-availability' : product.sold_out
   }),
     productImageObject = $('<img>', {
-      src : "images/" + currentResponseObject.url
+      'src' : this.imageFolder + product.url
     });
   productObject.append(productImageObject);
-  this.allProducts.push(productObject);
+  return productObject;
 };
 
 //Function to display all products
-ProductList.prototype.displayAllProducts = function() {
-  this.$productContainer.append(this.allProducts);
+ProductList.prototype.displayProducts = function(products) {
+  this.$productContainer.append(products);
 };
 
 //Function to handle change event
 ProductList.prototype.addChangeEventHandler = function() {
   var _this = this;
   this.$filterBox.on("change", function() {
-    var $filterElements = _this.$productContainer.find("[data-type='productimage']");
+    var $filterElements = _this.$productContainer.find(productSelector);
     $filterElements.hide();
     $filterElements = _this.filterProducts($filterElements);
     $filterElements.show();
@@ -66,31 +67,36 @@ ProductList.prototype.filterProducts = function(filterElements) {
   var _this = this;
   this.$filterBox.each(function() {
     var $currentFilter = $(this),
-      selector = "input[data-category='" + $currentFilter.attr("data-id") + "']:checked";
+      selector = "input[data-category='" + $currentFilter.data("category") + "']:checked";
       checkedInput = $currentFilter.find(selector);
-    _this.filteredProducts = [];
+    _this.filterCondition = [];
     if(checkedInput.length) {
-      _this.saveFilteredProductsInArray(checkedInput, $currentFilter);
-      filterElements = filterElements.filter(_this.filteredProducts.join());
+      _this.getFilterCondition(checkedInput, $currentFilter);
+      filterElements = filterElements.filter(_this.filterCondition.join());
     }
   });
   return filterElements;
 };
 
 //Function to save the constraints to filter products
-ProductList.prototype.saveFilteredProductsInArray = function(checkedFilter, currentFilterBox) {
+ProductList.prototype.getFilterCondition = function(checkedFilter, currentFilterBox) {
   var _this = this;
   checkedFilter.each(function() {
-    var id = currentFilterBox.attr('data-id');
-    _this.filteredProducts.push("[data-" + id + " = '" + $(this).attr('data-' + id) + "']");
+    var id = currentFilterBox.data("category");
+    _this.filterCondition.push("[data-" + id + " = '" + $(this).attr('data-' + id) + "']");
   });
 };
 
+//Constants
+const productSelector = "[data-type='productimage']";
+const filterSelector = "[data-name='filter-div']";
+
 $(function() {
   var options = {
-    $productContainer : $("#product-container"),
-    $filterBox : $(".filter-container .filter-div"),
-    url : 'json/product.json'
+    $productContainer : $("[data-id='product-container']"),
+    $filterBox : $("[data-id='filter-container']"),
+    url : 'json/product.json',
+    imageFolder : "images/"
   },
     productFilter = new ProductList(options);
   productFilter.init();
