@@ -117,7 +117,6 @@ ProductList.prototype.getFilterCondition = function(checkedFilter, currentFilter
 
 //Function to create the pagination bar
 ProductList.prototype.createPaginationBar = function(filterElements) {
-  console.log('createPaginationBar');
   this.$paginationBar.empty();
   var totalProducts = filterElements.length,
       productsPerPage = this.$paginationElement.val(),
