@@ -6,6 +6,10 @@ function ProductList(options) {
   this.url = options.url;
   this.imageFolder  = options.imageFolder;
   this.allProducts = [];
+  this.selectedPage = 1;
+  this.currentViewableProducts = [];
+  this.$paginationBar = options.$paginationBar;
+  this.$paginationElement = options.$paginationElement;
 }
 
 //Function to initiate all other functions
@@ -50,16 +54,25 @@ ProductList.prototype.buildProduct = function(index, product) {
 //Function to display all products
 ProductList.prototype.displayProducts = function(products) {
   this.$productContainer.append(products);
+  this.filteredElements = products;
+  this.bindPageClickEvent();
+  this.createPaginationBar(products);
+  this.$paginationElement.trigger('change');
 };
 
 //Function to handle change event
 ProductList.prototype.addChangeEventHandler = function() {
   var _this = this;
-  this.$filterBox.on("change", function() {
-    var $filterElements = _this.$productContainer.find(_this.productSelector);
-    $filterElements.hide();
-    $filterElements = _this.filterProducts($filterElements);
-    $filterElements.show();
+  this.$filterBox.on("change", function(event) {
+    $('[data-page='+_this.selectedPage+']').addClass('highlight');
+    _this.filteredElements = _this.$productContainer.find(_this.productSelector);
+    _this.filteredElements.hide();
+    //Filter products on basis of checked filters
+    _this.filteredElements = _this.filterProducts(_this.filteredElements);
+    _this.createPaginationForCheckedFilter(event);
+    //Paginate filtered elements
+    _this.filteredElements = _this.applyPagination(_this.filteredElements);
+    _this.filteredElements.show();
   });
 };
 
@@ -79,6 +92,14 @@ ProductList.prototype.filterProducts = function(filterElements) {
   return filterElements;
 };
 
+ProductList.prototype.createPaginationForCheckedFilter = function(event) {
+  if(event.originalEvent !== undefined) {
+    this.selectedPage = 1;
+    this.createPaginationBar(this.filteredElements);
+    $('[data-page='+this.selectedPage+']').addClass('highlight');
+  }
+};
+
 //Function to save the constraints to filter products
 ProductList.prototype.getFilterCondition = function(checkedFilter, currentFilterBox) {
   var _this = this;
@@ -88,12 +109,54 @@ ProductList.prototype.getFilterCondition = function(checkedFilter, currentFilter
   });
 };
 
+//Function to create the pagination bar
+ProductList.prototype.createPaginationBar = function(filterElements) {
+  this.$paginationBar.empty();
+  var totalProducts = filterElements.length,
+      productsPerPage = this.$paginationElement.val(),
+      noOfPages = Math.floor((totalProducts - 1) / productsPerPage) + 1;
+  for(var index = 1; index <= noOfPages; index += 1) {
+    var $page = $('<span>', {
+      id: 'page' + index,
+      'data-page' : index,
+      'class': 'page-number'}).html(index);
+    this.$paginationBar.append($page);
+  }
+};
+
+//Function to paginate elements
+ProductList.prototype.applyPagination = function(filterElements) {
+  var productsPerPage = parseInt(this.$paginationElement.val()),
+    totalProducts = filterElements.length,
+    firstProductIndex = (this.selectedPage - 1) * productsPerPage,
+    lastProductIndex = firstProductIndex + productsPerPage - 1;
+  if (lastProductIndex > totalProducts - 1) {
+    lastProductIndex = totalProducts - 1;
+  }
+  this.currentViewableProducts = filterElements.slice(firstProductIndex, lastProductIndex + 1);
+  return this.currentViewableProducts;
+};
+
+//Function which binds click event to pagination bar's page element
+ProductList.prototype.bindPageClickEvent = function() {
+  var _this = this,
+      $this = '';
+  this.$paginationBar.on('click', '[data-page]', function() {
+    $this = $(this);
+    $this.siblings().removeClass('highlight');
+    _this.selectedPage = $this.data('page');
+    _this.$paginationElement.trigger('change');
+  });
+};
+
 $(function() {
   var options = {
     $productContainer : $("[data-id='product-container']"),
     $filterBox : $("[data-id='filter-container']"),
     url : 'json/product.json',
     imageFolder : "images/",
+    $paginationBar : $('[data-id="paginationBar"]'),
+    $paginationElement : $('[data-category="pagination"]'),
     productSelector : "[data-type='productimage']",
     filterSelector : "[data-name='filter-div']"
   },
