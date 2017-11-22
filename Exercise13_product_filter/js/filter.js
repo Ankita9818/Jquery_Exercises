@@ -1,3 +1,4 @@
+//In pagination branch
 function FilterList(options) {
   this.url = options.url;
   this.$filterContainer = options.$filterContainer;
@@ -19,6 +20,15 @@ FilterList.prototype.loadJsonData = function() {
       _this.createFilters();
     }
   });
+};
+
+//Function to create pagination bar layout
+FilterList.prototype.createPaginationBar = function() {
+  var paginationBar = $('<div>',{
+    'class' : 'paginationBar',
+    'data-id' : 'paginationBar'
+  });
+  paginationBar.insertAfter(this.$productContainer);
 };
 
 //Function to create all filters
