@@ -10,6 +10,7 @@ function ProductList(options) {
   this.currentViewableProducts = [];
   this.$paginationBar = options.$paginationBar;
   this.$paginationElement = options.$paginationElement;
+  this.highlightClass = options.highlightClass;
 }
 
 //Function to initiate all other functions
@@ -54,17 +55,22 @@ ProductList.prototype.buildProduct = function(index, product) {
 //Function to display all products
 ProductList.prototype.displayProducts = function(products) {
   this.$productContainer.append(products);
+  this.paginateAllProducts(products);
+};
+
+//Function to paginate all products at beginning
+ProductList.prototype.paginateAllProducts = function(products) {
   this.filteredElements = products;
   this.bindPageClickEvent();
   this.createPaginationBar(products);
   this.$paginationElement.trigger('change');
-};
+}
 
 //Function to handle change event
 ProductList.prototype.addChangeEventHandler = function() {
   var _this = this;
   this.$filterBox.on("change", function(event) {
-    $('[data-page='+_this.selectedPage+']').addClass('highlight');
+    $('[data-page='+_this.selectedPage+']').addClass(_this.highlightClass);
     _this.filteredElements = _this.$productContainer.find(_this.productSelector);
     _this.filteredElements.hide();
     //Filter products on basis of checked filters
@@ -74,6 +80,14 @@ ProductList.prototype.addChangeEventHandler = function() {
     _this.filteredElements = _this.applyPagination(_this.filteredElements);
     _this.filteredElements.show();
   });
+};
+
+ProductList.prototype.createPaginationForCheckedFilter = function(event) {
+  if(event.originalEvent !== undefined) {
+    this.selectedPage = 1;
+    this.createPaginationBar(this.filteredElements);
+    $('[data-page='+this.selectedPage+']').addClass(this.highlightClass);
+  }
 };
 
 //Function to filter the products concurrently
@@ -92,14 +106,6 @@ ProductList.prototype.filterProducts = function(filterElements) {
   return filterElements;
 };
 
-ProductList.prototype.createPaginationForCheckedFilter = function(event) {
-  if(event.originalEvent !== undefined) {
-    this.selectedPage = 1;
-    this.createPaginationBar(this.filteredElements);
-    $('[data-page='+this.selectedPage+']').addClass('highlight');
-  }
-};
-
 //Function to save the constraints to filter products
 ProductList.prototype.getFilterCondition = function(checkedFilter, currentFilterBox) {
   var _this = this;
@@ -111,6 +117,7 @@ ProductList.prototype.getFilterCondition = function(checkedFilter, currentFilter
 
 //Function to create the pagination bar
 ProductList.prototype.createPaginationBar = function(filterElements) {
+  console.log('createPaginationBar');
   this.$paginationBar.empty();
   var totalProducts = filterElements.length,
       productsPerPage = this.$paginationElement.val(),
@@ -143,7 +150,7 @@ ProductList.prototype.bindPageClickEvent = function() {
       $this = '';
   this.$paginationBar.on('click', '[data-page]', function() {
     $this = $(this);
-    $this.siblings().removeClass('highlight');
+    $this.siblings().removeClass(_this.highlightClass);
     _this.selectedPage = $this.data('page');
     _this.$paginationElement.trigger('change');
   });
@@ -158,7 +165,8 @@ $(function() {
     $paginationBar : $('[data-id="paginationBar"]'),
     $paginationElement : $('[data-category="pagination"]'),
     productSelector : "[data-type='productimage']",
-    filterSelector : "[data-name='filter-div']"
+    filterSelector : "[data-name='filter-div']",
+    highlightClass : 'highlight'
   },
     productFilter = new ProductList(options);
   productFilter.init();

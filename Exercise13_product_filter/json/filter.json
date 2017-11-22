@@ -25,5 +25,14 @@
     "filter_values": [
       "Available_Products"
     ]
+  },
+  {
+    "filter_name": "Pagination",
+    "filter_type": "select",
+    "filter_values": [
+      "3",
+      "6",
+      "9"
+    ]
   }
 ]

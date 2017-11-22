@@ -39,3 +39,25 @@ body {
   display: block;
   text-transform: capitalize;
 }
+
+.paginationBar {
+  bottom: 0;
+  left: 50%;
+  position: absolute;
+}
+
+.highlight {
+  color: green;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.page-number {
+  cursor: pointer;
+  margin: 5px;
+}
+
+.page-number:hover {
+  color: red;
+  font-weight: bold;
+}

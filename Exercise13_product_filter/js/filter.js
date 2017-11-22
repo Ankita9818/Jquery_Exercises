@@ -1,11 +1,12 @@
-//In pagination branch
 function FilterList(options) {
   this.url = options.url;
   this.$filterContainer = options.$filterContainer;
+  this.$productContainer = options.$productContainer;
 }
 
 FilterList.prototype.init = function() {
   this.loadJsonData();
+  this.createPaginationBar();
 };
 
 //Function to load filter data from json file
