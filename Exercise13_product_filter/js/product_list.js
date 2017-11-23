@@ -78,10 +78,25 @@ ProductList.prototype.addChangeEventHandler = function() {
     _this.filterProducts();
     _this.createPaginationForCheckedFilter(event);
     _this.applySorting();     // to sort filtered products
-    _this.filteredELements = _this.applyPagination();
-    _this.moveFilteredProductsInArray();
-    _this.displayFilteredProducts();
+    _this.applyPagination();
+    _this.showProducts();
   });
+};
+
+//Function to filter the products concurrently
+ProductList.prototype.filterProducts = function() {
+  var _this = this;
+  this.$filterBox.each(function() {
+    var $currentFilter = $(this),
+      selector = "input[data-category='" + $currentFilter.data("category") + "']:checked";
+      checkedInput = $currentFilter.find(selector);
+    _this.filterCondition = [];
+    if(checkedInput.length) {
+      _this.getFilterCondition(checkedInput, $currentFilter);
+      _this.filteredElements = _this.filteredElements.filter(_this.filterCondition.join());
+    }
+  });
+  _this.moveFilteredProductsInArray();
 };
 
 //Function to save filtered products in an array
@@ -94,7 +109,7 @@ this.filteredElements = elementsArray;
 };
 
 //Function to display filtered products
-ProductList.prototype.displayFilteredProducts = function() {
+ProductList.prototype.showProducts = function() {
   var _this = this;
   $.each(this.filteredElements, function() {
     _this.$productContainer.append($(this).show());
@@ -113,21 +128,6 @@ ProductList.prototype.createPaginationForCheckedFilter = function(event) {
 //To highlight selected Page Number
 ProductList.prototype.highlightSelectedPage = function() {
   $('[data-page=' + this.selectedPage + ']').addClass(this.highlightClass);
-};
-
-//Function to filter the products concurrently
-ProductList.prototype.filterProducts = function() {
-  var _this = this;
-  this.$filterBox.each(function() {
-    var $currentFilter = $(this),
-      selector = "input[data-category='" + $currentFilter.data("category") + "']:checked";
-      checkedInput = $currentFilter.find(selector);
-    _this.filterCondition = [];
-    if(checkedInput.length) {
-      _this.getFilterCondition(checkedInput, $currentFilter);
-      _this.filteredElements = _this.filteredElements.filter(_this.filterCondition.join());
-    }
-  });
 };
 
 //Function to save the constraints to filter products
@@ -155,7 +155,8 @@ ProductList.prototype.getPage = function(pageNumber) {
   return $('<span>', {
     'id': 'page' + pageNumber,
     'data-page' : pageNumber,
-    'class': 'page-number'}).html(pageNumber);
+    'class': 'page-number'
+  }).html(pageNumber);
 };
 
 //Function to paginate elements
@@ -167,8 +168,7 @@ ProductList.prototype.applyPagination = function() {
   if (lastProductIndex > totalProducts - 1) {
     lastProductIndex = totalProducts - 1;
   }
-  this.currentViewableProducts = this.filteredElements.slice(firstProductIndex, lastProductIndex + 1);
-  return this.currentViewableProducts;
+  this.filteredElements = this.filteredElements.slice(firstProductIndex, lastProductIndex + 1);
 };
 
 //Function which binds click event to pagination bar's page element
