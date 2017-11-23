@@ -64,7 +64,7 @@ ProductList.prototype.paginateAllProducts = function(products) {
   this.bindPageClickEvent();
   this.createPaginationBar(products);
   this.$paginationElement.trigger('change');
-}
+};
 
 //Function to handle change event
 ProductList.prototype.addChangeEventHandler = function() {
