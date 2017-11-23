@@ -78,7 +78,7 @@ ProductList.prototype.addChangeEventHandler = function() {
     _this.filterProducts();
     _this.createPaginationForCheckedFilter(event);
     _this.applySorting();     // to sort filtered products
-    _this.applyPagination();
+    _this.filteredELements = _this.applyPagination();
     _this.moveFilteredProductsInArray();
     _this.displayFilteredProducts();
   });
@@ -155,8 +155,7 @@ ProductList.prototype.getPage = function(pageNumber) {
   return $('<span>', {
     'id': 'page' + pageNumber,
     'data-page' : pageNumber,
-    'class': 'page-number'
-  }).html(pageNumber);
+    'class': 'page-number'}).html(pageNumber);
 };
 
 //Function to paginate elements
@@ -168,7 +167,8 @@ ProductList.prototype.applyPagination = function() {
   if (lastProductIndex > totalProducts - 1) {
     lastProductIndex = totalProducts - 1;
   }
-  this.filteredElements = this.filteredElements.slice(firstProductIndex, lastProductIndex + 1);
+  this.currentViewableProducts = this.filteredElements.slice(firstProductIndex, lastProductIndex + 1);
+  return this.currentViewableProducts;
 };
 
 //Function which binds click event to pagination bar's page element
