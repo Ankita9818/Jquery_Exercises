@@ -34,5 +34,15 @@
       "6",
       "9"
     ]
+  },
+  {
+    "filter_name": "Sorting",
+    "filter_type": "select",
+    "filter_values": [
+      "Id",
+      "Colors",
+      "Brands",
+      "Availability"
+    ]
   }
 ]

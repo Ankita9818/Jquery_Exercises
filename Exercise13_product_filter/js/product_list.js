@@ -11,6 +11,7 @@ function ProductList(options) {
   this.$paginationBar = options.$paginationBar;
   this.$paginationElement = options.$paginationElement;
   this.highlightClass = options.highlightClass;
+  this.$sortBy = options.$sortBy;
 }
 
 //Function to initiate all other functions
@@ -39,7 +40,8 @@ ProductList.prototype.loadJsonData = function() {
 //Function to store all products
 ProductList.prototype.buildProduct = function(index, product) {
   var productObject = $('<div>', {
-    'id' : index,
+    'id' : (index + 1),
+    'data-id' : (index + 1),
     'data-type' : 'productimage',
     'data-brands' : product.brand,
     'data-colors' : product.color,
@@ -69,7 +71,6 @@ ProductList.prototype.paginateAllProducts = function(products) {
 //Function to handle change event
 ProductList.prototype.addChangeEventHandler = function() {
   var _this = this;
-  this.bindPageClickEvent();
   this.$filterBox.on("change", function(event) {
     _this.highlightSelectedPage();
     _this.filteredElements = _this.$productContainer.find(_this.productSelector);
@@ -77,9 +78,29 @@ ProductList.prototype.addChangeEventHandler = function() {
     //Filter products on basis of checked filters
     _this.filteredElements = _this.filterProducts(_this.filteredElements);
     _this.createPaginationForCheckedFilter(event);
+    //Sort elements
+    _this.filteredElements = _this.applySorting(_this.filteredElements);
     //Paginate filtered elements
     _this.filteredElements = _this.applyPagination(_this.filteredElements);
-    _this.filteredElements.show();
+    _this.filteredElements = _this.moveFilteredProductsInArray(_this.filteredElements);
+    _this.displayFilteredProducts(_this.filteredElements);
+  });
+};
+
+//Function to save filtered products in an array
+ProductList.prototype.moveFilteredProductsInArray = function(elements) {
+  var elementsArray = [];
+  $.each(elements, function() {
+      elementsArray.push(this);
+  });
+  return elementsArray;
+};
+
+//Function to display filtered products
+ProductList.prototype.displayFilteredProducts = function(elements) {
+  var _this = this;
+  $.each(elements, function() {
+    _this.$productContainer.append($(this).show());
   });
 };
 
@@ -162,6 +183,23 @@ ProductList.prototype.bindPageClickEvent = function() {
   });
 };
 
+//Function which sorts the products
+ProductList.prototype.applySorting = function(filterElements) {
+  var sortCriteria = this.$sortBy.val();
+  console.log(sortCriteria);
+  filterElements.sort(function(product1, product2) {
+    var sortCondition = (sortCriteria != 'id') ?
+      $(product1).attr('data-' + sortCriteria) > $(product2).attr('data-' + sortCriteria) :
+      parseInt($(product1).attr('data-' + sortCriteria)) > parseInt($(product2).attr('data-' + sortCriteria));
+    if (sortCondition) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+  return filterElements;
+};
+
 $(function() {
   var options = {
     $productContainer : $("[data-id='product-container']"),
@@ -172,6 +210,7 @@ $(function() {
     $paginationElement : $('[data-category="pagination"]'),
     productSelector : "[data-type='productimage']",
     filterSelector : "[data-name='filter-div']",
+    $sortBy : $('[data-category="sorting"]'),
     highlightClass : 'highlight'
   },
     productFilter = new ProductList(options);

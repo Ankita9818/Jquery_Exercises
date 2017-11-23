@@ -90,7 +90,7 @@ FilterList.prototype.createSelectFilter = function(filter) {
   for(var index = 0; index < filter.filter_values.length; index++) {
     var tempOptions = $('<option>', {
       'id' : filter.filter_values[index],
-      'value' : filter.filter_values[index],
+      'value' : filter.filter_values[index].toLowerCase(),
       'text' : filter.filter_values[index]
     });
     tempSelectFilter.append(tempOptions);
