@@ -1,6 +1,6 @@
 //constructor for Products List
 function ProductList(options) {
-  this.$productContainer = options.$productContainer
+  this.$productContainer = options.$productContainer;
   this.$filterBox = options.$filterBox.find(options.filterSelector);
   this.productSelector = options.productSelector;
   this.url = options.url;
@@ -8,16 +8,23 @@ function ProductList(options) {
   this.allProducts = [];
   this.selectedPage = 1;
   this.currentViewableProducts = [];
+  this.$brandFilter = options.$brandFilter;
+  this.$colorFilter = options.$colorFilter;
+  this.$availability = options.$availabilityFilter;
   this.$paginationBar = options.$paginationBar;
   this.$paginationElement = options.$paginationElement;
   this.highlightClass = options.highlightClass;
   this.$sortBy = options.$sortBy;
 }
 
+ProductList.prototype.hashUrlSelectedFiltersRegEx =
+  /^\?brands=((0|1)+)&colors=((0|1)+)&availability=(0|1)&sortingCriteria=(\w+)&pagination=(\d+)&page=(\d+)$/;
+
 //Function to initiate all other functions
 ProductList.prototype.init = function() {
   this.loadJsonData();
   this.addChangeEventHandler();
+  this.checkCurrentSelectionURL();
 };
 
 //Function to get products data from json file
@@ -80,6 +87,7 @@ ProductList.prototype.addChangeEventHandler = function() {
     _this.applySorting();     // to sort filtered products
     _this.applyPagination();
     _this.showProducts();
+    _this.createCurrentSelectedFilterHashURL();  //Creates the url for current selected filters
   });
 };
 
@@ -88,7 +96,7 @@ ProductList.prototype.filterProducts = function() {
   var _this = this;
   this.$filterBox.each(function() {
     var $currentFilter = $(this),
-      selector = "input[data-category='" + $currentFilter.data("category") + "']:checked";
+      selector = "input[data-category='" + $currentFilter.data("category") + "']:checked",
       checkedInput = $currentFilter.find(selector);
     _this.filterCondition = [];
     if(checkedInput.length) {
@@ -120,9 +128,9 @@ ProductList.prototype.showProducts = function() {
 ProductList.prototype.createPaginationForCheckedFilter = function(event) {
   if(event.originalEvent !== undefined) {
     this.selectedPage = 1;
-    this.createPaginationBar(this.filteredElements);
-    this.highlightSelectedPage();
   }
+  this.createPaginationBar(this.filteredElements);
+  this.highlightSelectedPage();
 };
 
 //To highlight selected Page Number
@@ -145,6 +153,7 @@ ProductList.prototype.createPaginationBar = function(filterElements) {
   var totalProducts = filterElements.length,
       productsPerPage = this.$paginationElement.val(),
       noOfPages = Math.floor((totalProducts - 1) / productsPerPage) + 1;
+  this.noOfPages = noOfPages;
   for(var index = 1; index <= noOfPages; index += 1) {
     var $page = this.getPage(index);
     this.$paginationBar.append($page);
@@ -196,6 +205,79 @@ ProductList.prototype.applySorting = function() {
   });
 };
 
+//updates URL for every selection
+ProductList.prototype.createCurrentSelectedFilterHashURL = function() {
+  this.selectedFilters = {
+    brands: this.getCheckedFilters(this.$brandFilter),
+    colors: this.getCheckedFilters(this.$colorFilter),
+    availability: this.getCheckedFilters(this.$availability),
+    sortingCriteria: this.$sortBy.val(),
+    pagination: this.$paginationElement.val()
+  };
+  history.pushState(this.selectedFilters, "SHOP", '?' + $.param(this.selectedFilters) + '&page=' + this.selectedPage);
+};
+
+//code to represent checked filters
+ProductList.prototype.getCheckedFilters = function(filter) {
+  var checkedFilterCode = '';
+  $.each(filter, function() {
+    checkedFilterCode += (this.checked) ? '1' : '0';
+  });
+  return checkedFilterCode;
+};
+
+//Function to check filters if url containes hash for it
+ProductList.prototype.checkCurrentSelectionURL = function() {
+  if(location.search) {
+    var selectedFilters = '';
+    if(this.hashUrlSelectedFiltersRegEx.test(location.search)) {
+      selectedFilters = $.map(location.search.slice(1).split('&'), function(filter) {
+        return filter.split('=')[1];
+      });
+      this.checkSelectedFilters(this.$brandFilter, selectedFilters[0]);
+      this.checkSelectedFilters(this.$colorFilter, selectedFilters[1]);
+      this.checkSelectedFilters(this.$availability, selectedFilters[2]);
+      this.checkSelectedSelectBoxOption(this.$sortBy,selectedFilters[3]);
+      this.checkSelectedSelectBoxOption(this.$paginationElement,selectedFilters[4]);
+      this.checkSelectedPage(selectedFilters[5]);
+    }
+  }
+};
+
+//Function to check selected checkboxes
+ProductList.prototype.checkSelectedFilters = function(filterContainer, filter){
+  var index = 0,
+      isChecked = 0;
+  if(filter.length !== filterContainer.length) {
+   location.replace(location.pathname);
+  } else {
+    $.each(filterContainer, function() {
+      isChecked = parseInt(filter[index]);
+      this.checked = isChecked;
+      index++;
+    });
+  }
+};
+
+//Function to check selected options of selectboxes - sorting and pagination
+ProductList.prototype.checkSelectedSelectBoxOption = function(filterContainer, selectedValue) {
+  var selectedOption = filterContainer.find('option[value=' + selectedValue + ']');
+  if (selectedOption.length) {
+    selectedOption[0].selected = true;
+  } else {
+    location.replace(location.pathname);
+  }
+};
+
+//Function to select page number
+ProductList.prototype.checkSelectedPage = function(pageNumber) {
+  if(pageNumber > this.noOfPages) {
+    location.replace(location.pathname);
+  } else {
+    this.selectedPage = pageNumber;
+  }
+};
+
 $(function() {
   var options = {
     $productContainer : $("[data-id='product-container']"),
@@ -207,6 +289,9 @@ $(function() {
     productSelector : "[data-type='productimage']",
     filterSelector : "[data-name='filter-div']",
     $sortBy : $('[data-category="sorting"]'),
+    $brandFilter : $('[data-category="brands"]'),
+    $colorFilter : $('[data-category="colors"]'),
+    $availabilityFilter : $('[data-category="availability"]'),
     highlightClass : 'highlight'
   },
     productFilter = new ProductList(options);
