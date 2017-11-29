@@ -238,7 +238,7 @@ ProductList.prototype.checkCurrentSelectionURL = function() {
     });
     $.each(selectedFilters, function(element) {
       var selectedFilterElement = this.split('=');
-      successFlag = _this.checkSelectedFilters(selectedFilterElement[0], selectedFilterElement[1]);
+      _this.checkSelectedFilters(selectedFilterElement[0], selectedFilterElement[1]);
     });
   }
 };
