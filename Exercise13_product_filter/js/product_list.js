@@ -7,18 +7,11 @@ function ProductList(options) {
   this.imageFolder  = options.imageFolder;
   this.allProducts = [];
   this.selectedPage = 1;
-  this.currentViewableProducts = [];
-  this.$brandFilter = options.$brandFilter;
-  this.$colorFilter = options.$colorFilter;
-  this.$availability = options.$availabilityFilter;
   this.$paginationBar = options.$paginationBar;
   this.$paginationElement = options.$paginationElement;
   this.highlightClass = options.highlightClass;
   this.$sortBy = options.$sortBy;
 }
-
-ProductList.prototype.hashUrlSelectedFiltersRegEx =
-  /^\?brands=((0|1)+)&colors=((0|1)+)&availability=(0|1)&sortingCriteria=(\w+)&pagination=(\d+)&page=(\d+)$/;
 
 //Function to initiate all other functions
 ProductList.prototype.init = function() {
@@ -207,56 +200,75 @@ ProductList.prototype.applySorting = function() {
 
 //updates URL for every selection
 ProductList.prototype.createCurrentSelectedFilterHashURL = function() {
-  this.selectedFilters = {
-    brands: this.getCheckedFilters(this.$brandFilter),
-    colors: this.getCheckedFilters(this.$colorFilter),
-    availability: this.getCheckedFilters(this.$availability),
-    sortingCriteria: this.$sortBy.val(),
-    pagination: this.$paginationElement.val()
-  };
+  this.selectedFilters = {};
+  var _this = this;
+  this.$filterBox.each(function() {
+    var $currentFilter = $(this),
+      key = $currentFilter.data('category'),
+      selectElement = $currentFilter.find('select');
+    if(selectElement.length) {
+      _this.selectedFilters[key] = selectElement.val();
+    } else {
+      var selectedFiltersArray = [],
+        selector = "input[data-category='" + $currentFilter.data("category") + "']:checked",
+        checkedInput = $currentFilter.find(selector);
+      selectedFiltersArray = _this.getCheckedFilters(checkedInput);
+      _this.selectedFilters[key] = selectedFiltersArray;
+    }
+  });
   history.pushState(this.selectedFilters, "SHOP", '?' + $.param(this.selectedFilters) + '&page=' + this.selectedPage);
 };
 
 //code to represent checked filters
 ProductList.prototype.getCheckedFilters = function(filter) {
-  var checkedFilterCode = '';
-  $.each(filter, function() {
-    checkedFilterCode += (this.checked) ? '1' : '0';
+  var selectedFiltersArray = [];
+  filter.each(function() {
+    selectedFiltersArray.push(this.value);
   });
-  return checkedFilterCode;
+  return selectedFiltersArray;
 };
 
 //Function to check filters if url containes hash for it
 ProductList.prototype.checkCurrentSelectionURL = function() {
   if(location.search) {
-    var selectedFilters = '';
-    if(this.hashUrlSelectedFiltersRegEx.test(location.search)) {
-      selectedFilters = $.map(location.search.slice(1).split('&'), function(filter) {
-        return filter.split('=')[1];
-      });
-      this.checkSelectedFilters(this.$brandFilter, selectedFilters[0]);
-      this.checkSelectedFilters(this.$colorFilter, selectedFilters[1]);
-      this.checkSelectedFilters(this.$availability, selectedFilters[2]);
-      this.checkSelectedSelectBoxOption(this.$sortBy,selectedFilters[3]);
-      this.checkSelectedSelectBoxOption(this.$paginationElement,selectedFilters[4]);
-      this.checkSelectedPage(selectedFilters[5]);
-    }
+    var selectedFilters = [],
+      _this = this;
+    selectedFilters = $.map(location.search.slice(1).split('&'), function(filter) {
+      return filter.replace(/%5B|%5D/g, "").replace(/%20/g, " ");
+    });
+    $.each(selectedFilters, function(element) {
+      var selectedFilterElement = this.split('=');
+      successFlag = _this.checkSelectedFilters(selectedFilterElement[0], selectedFilterElement[1]);
+    });
   }
 };
 
 //Function to check selected checkboxes
-ProductList.prototype.checkSelectedFilters = function(filterContainer, filter){
-  var index = 0,
-      isChecked = 0;
-  if(filter.length !== filterContainer.length) {
-   location.replace(location.pathname);
+ProductList.prototype.checkSelectedFilters = function(filterContainer, filter) {
+  var _this = this,
+    selectedFilterContainer;
+  if(filterContainer == 'page') {
+    _this.checkSelectedPage(filter);
   } else {
-    $.each(filterContainer, function() {
-      isChecked = parseInt(filter[index]);
-      this.checked = isChecked;
-      index++;
+    this.$filterBox.each(function() {
+      if($(this).data('category') == filterContainer) {
+        selectedFilterContainer = $(this);
+      }
     });
+    if(selectedFilterContainer.find('select').length) {
+      _this.checkSelectedSelectBoxOption(selectedFilterContainer,filter);
+    } else {
+      _this.checkCheckboxFilter(selectedFilterContainer, filter);
+    }
   }
+};
+
+ProductList.prototype.checkCheckboxFilter = function(filterContainer, filter) {
+  filterContainer.find('input').each(function() {
+    if($(this).attr('value') == filter) {
+      $(this).prop('checked', true);
+    }
+  });
 };
 
 //Function to check selected options of selectboxes - sorting and pagination
@@ -289,9 +301,6 @@ $(function() {
     productSelector : "[data-type='productimage']",
     filterSelector : "[data-name='filter-div']",
     $sortBy : $('[data-category="sorting"]'),
-    $brandFilter : $('[data-category="brands"]'),
-    $colorFilter : $('[data-category="colors"]'),
-    $availabilityFilter : $('[data-category="availability"]'),
     highlightClass : 'highlight'
   },
     productFilter = new ProductList(options);
