@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Contact Manager</title>
+  <link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <form class="contact-block" name="contact-form" method="post" data-usage='contact-form'>
+    <label>Name<input type="text" name="user-name" class="form-field" data-usage='name'></label><br>
+    <label>Email<input type="text" name="user-email" class="form-field" data-usage='email'></label><br>
+    <input type="button" name="add" value="Add Contact" class="btn" data-usage='add-btn'><br>
+    <label>Search<input type="text" name="search" class="form-field" data-usage='search-input'></label><br>
+  </form>
+  <div class="contact-display" data-usage="contact-display">
+  </div>
+<script src="lib/jquery-3.2.1.js"></script>
+<script src="js/contact_manager.js"></script>
+</body>
+</html>
