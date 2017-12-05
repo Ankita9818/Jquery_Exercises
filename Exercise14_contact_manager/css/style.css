@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.contact-block {
+  background-color: honeydew;
+  border: 4px solid lightseagreen;
+  margin: auto;
+  padding: 10px;
+  text-align: center;
+  width: 500px;
+}
+
+.form-field {
+  margin: 10px;
+  height: 20px;
+  padding: 4px;
+}
+
+.btn {
+  border: 1px solid limegreen;
+  padding: 5px;
+}
+
+.btn:hover {
+  background-color: limegreen;
+  color: white;
+  cursor: pointer;
+}
+
+.contact-div {
+  border: 2px solid grey;
+  display: inline-block;
+  margin: 5px;
+  padding: 10px;
+  text-align: center;
+}
