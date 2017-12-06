@@ -2,6 +2,7 @@
 function Contact(user) {
   this.name = user.name;
   this.email = user.email;
+  this.uniqueId = user.uniqueId;
 }
 
 //Function which creates a contact
@@ -37,11 +38,12 @@ Contact.prototype.appendInfo = function(div, info) {
 
 Contact.prototype.createContactView = function(name) {
   var contactDiv = $('<div>',{
-      'data-name' : name
+      'data-name' : name,
+      'data-id' : this.uniqueId
     }).addClass('contact-div'),
     deleteContact = $('<button>', {
       'data-usage' : 'deleteContact',
-      'data-name' : name,
+      'data-id' : this.uniqueId,
       'text' : 'Delete Contact'
     }).addClass('btn');
   contactDiv.append(deleteContact);

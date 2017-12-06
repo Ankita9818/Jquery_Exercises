@@ -8,6 +8,7 @@ function ContactManager(options) {
   this.searchInput = options.searchInput;
   this.deleteContact = options.deleteContact;
   this.contactList = [];
+  this.uId = 0;
 }
 
 ContactManager.prototype.init = function() {
@@ -24,7 +25,7 @@ ContactManager.prototype.bindEventListeners = function() {
     _this.searchContacts();
   });
   this.contactDisplayBlock.on('click', this.deleteContact, function() {
-    _this.deleteUserContact($(this).data('name'));
+    _this.deleteUserContact($(this).data('id'));
   });
 };
 
@@ -44,7 +45,8 @@ ContactManager.prototype.searchContacts = function() {
 ContactManager.prototype.contactCreator = function() {
   var contact = {
         name : this.processUserInformation(this.userNameInput),
-        email : this.processUserInformation(this.userMailInput)
+        email : this.processUserInformation(this.userMailInput),
+        uniqueId : this.uId++
       },
       user = new Contact(contact);
   if(user.validateContact()) {
@@ -52,6 +54,12 @@ ContactManager.prototype.contactCreator = function() {
     contact = user.createContact();
     this.displayContact(contact);
   }
+};
+
+//Function to display contact
+ContactManager.prototype.displayContact = function(contact) {
+  this.contactDisplayBlock.append(contact);
+  this.contactForm[0].reset();
 };
 
 ContactManager.prototype.processUserInformation = function(info) {
@@ -69,23 +77,17 @@ ContactManager.prototype.displayContactList = function(List) {
   });
 };
 
-//Function to display contact
-ContactManager.prototype.displayContact = function(contact) {
-  this.contactDisplayBlock.append(contact);
-  this.contactForm[0].reset();
-};
-
 //Function which deletes the contact
-ContactManager.prototype.deleteUserContact = function(contactName) {
-  var indexSpliced = this.deleteContactFromList(contactName);
-  $('[data-name=' + contactName + ']').remove();
+ContactManager.prototype.deleteUserContact = function(contactId) {
+  var indexSpliced = this.deleteContactFromList(contactId);
+  $('[data-id=' + contactId + ']').remove();
 };
 
 //Function which gets the index of the contact from list
-ContactManager.prototype.deleteContactFromList = function(contactNameToBeDeleted) {
+ContactManager.prototype.deleteContactFromList = function(contactId) {
   var _this = this;
   $.each(this.contactList, function(index, elem) {
-    if(elem.name == contactNameToBeDeleted) {
+    if(elem.uniqueId == contactId) {
       _this.contactList.splice(index, 1);
       return false;
     }
