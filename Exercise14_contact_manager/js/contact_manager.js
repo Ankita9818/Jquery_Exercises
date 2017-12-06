@@ -7,7 +7,6 @@ function ContactManager(options) {
   this.contactDisplayBlock = options.contactDisplayBlock;
   this.searchInput = options.searchInput;
   this.deleteContact = options.deleteContact;
-  this.contactDivClass = options.contactDivClass;
   this.contactList = [];
 }
 
@@ -25,20 +24,17 @@ ContactManager.prototype.bindEventListeners = function() {
     _this.searchContacts();
   });
   this.contactDisplayBlock.on('click', this.deleteContact, function() {
-    _this.deleteContactFromContactList($(this).parent('.' + _this.contactDivClass));
+    _this.deleteUserContact($(this).data('name'));
   });
 };
 
 //Function to search contacts at real time
 ContactManager.prototype.searchContacts = function() {
-  var _tempContactList = this.contactList.slice(0),
-      searchTerm = this.searchInput.val().toLowerCase(),
-      contactName,
-      indexToSplice = 0;
-  $.each(this.contactList, function(index) {
-    contactName = this.name;
-    if(contactName.indexOf(searchTerm) === -1) {
-      _tempContactList.splice(index - indexToSplice++, 1);
+  var _tempContactList = [],
+      searchTerm = this.searchInput.val().toLowerCase();
+  $.each(this.contactList, function(index, elem) {
+    if(this.name.indexOf(searchTerm) !== -1) {
+      _tempContactList.push(elem);
     }
   });
   this.displayContactList(_tempContactList);
@@ -46,15 +42,15 @@ ContactManager.prototype.searchContacts = function() {
 
 //Function which creates a contact
 ContactManager.prototype.contactCreator = function() {
-  var _this = this,
-    contact = {
-      name : _this.processUserInformation(_this.userNameInput),
-      email : _this.processUserInformation(_this.userMailInput)
-    },
-    user = new Contact(contact);
-  if(user.validateContactInformation()) {
+  var contact = {
+        name : this.processUserInformation(this.userNameInput),
+        email : this.processUserInformation(this.userMailInput)
+      },
+      user = new Contact(contact);
+  if(user.validateContact()) {
     this.contactList.push(user);
-    _this.displayContactList(this.contactList);
+    contact = user.createContact();
+    this.displayContact(contact);
   }
 };
 
@@ -70,8 +66,8 @@ ContactManager.prototype.displayContactList = function(List) {
   $.each(List, function() {
     contact = this.createContact();
     _this.displayContact(contact);
-  })
-}
+  });
+};
 
 //Function to display contact
 ContactManager.prototype.displayContact = function(contact) {
@@ -80,15 +76,20 @@ ContactManager.prototype.displayContact = function(contact) {
 };
 
 //Function which deletes the contact
-ContactManager.prototype.deleteContactFromContactList = function(contactToBeDeleted) {
-  var _temporaryContacts = this.contactList.slice(0);
+ContactManager.prototype.deleteUserContact = function(contactName) {
+  var indexSpliced = this.deleteContactFromList(contactName);
+  $('[data-name=' + contactName + ']').remove();
+};
+
+//Function which gets the index of the contact from list
+ContactManager.prototype.deleteContactFromList = function(contactNameToBeDeleted) {
+  var _this = this;
   $.each(this.contactList, function(index, elem) {
-    if(elem.name == contactToBeDeleted.data('name')) {
-      _temporaryContacts.splice(index, 1);
+    if(elem.name == contactNameToBeDeleted) {
+      _this.contactList.splice(index, 1);
+      return false;
     }
   });
-  this.contactList = _temporaryContacts;
-  this.displayContactList(this.contactList);
 };
 
 $(function() {
@@ -100,7 +101,6 @@ $(function() {
     contactDisplayBlock : $('[data-usage="contact-display"]'),
     searchInput : $('[data-usage="search-input"]'),
     deleteContact : '[data-usage="deleteContact"]',
-    contactDivClass : 'contact-div'
   },
     contact = new ContactManager(options);
   contact.init();

@@ -13,7 +13,7 @@ Contact.prototype.createContact = function() {
 };
 
 //Function which validates contacts details
-Contact.prototype.validateContactInformation = function() {
+Contact.prototype.validateContact = function() {
   return(this.validateName(this.name) && this.validateEmail(this.email));
 };
 
@@ -41,6 +41,7 @@ Contact.prototype.createContactView = function(name) {
     }).addClass('contact-div'),
     deleteContact = $('<button>', {
       'data-usage' : 'deleteContact',
+      'data-name' : name,
       'text' : 'Delete Contact'
     }).addClass('btn');
   contactDiv.append(deleteContact);
