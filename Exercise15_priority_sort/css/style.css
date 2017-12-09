@@ -15,7 +15,7 @@ body {
   max-width : 400px;
 }
 
-ul {
+.lists {
   background-color: seagreen;
   color: bisque;
   list-style-type: none;
@@ -28,25 +28,25 @@ ul {
   width: 200px;
 }
 
-li {
+.lists li {
   margin-left: 0;
   padding: 5px;
 }
 
-li:not(:last-child) {
+.lists li:not(:last-child) {
   border-bottom: 1px solid green;
 }
 
-li:nth-child(odd) {
+.lists li:nth-child(odd) {
   background-color: palegreen;
   color: sienna;
 }
 
-h2 {
+.heading {
   text-align: center;
 }
 
-h2:not(:first-child) {
+.heading:not(:first-child) {
   border-top : 4px solid black;
   padding-top: 20px;
 }
