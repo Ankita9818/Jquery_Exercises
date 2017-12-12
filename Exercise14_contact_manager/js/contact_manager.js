@@ -32,10 +32,12 @@ ContactManager.prototype.bindEventListeners = function() {
 //Function to search contacts at real time
 ContactManager.prototype.searchContacts = function() {
   var _tempContactList = [],
+      contact,
       searchTerm = this.searchInput.val().toLowerCase();
   $.each(this.contactList, function(index, elem) {
     if(this.name.indexOf(searchTerm) !== -1) {
-      _tempContactList.push(elem);
+      contact = elem.createContact();
+      _tempContactList.push(contact);
     }
   });
   this.displayContactList(_tempContactList);
@@ -68,12 +70,9 @@ ContactManager.prototype.processUserInformation = function(info) {
 
 //Function to display contacts
 ContactManager.prototype.displayContactList = function(List) {
-  var _this = this,
-      contact;
+  var _this = this;
   this.contactDisplayBlock.empty();
-  $.each(List, function() {
-    _this.displayContact(this);
-  });
+  this.contactDisplayBlock.append(List);
 };
 
 //Function which deletes the contact
