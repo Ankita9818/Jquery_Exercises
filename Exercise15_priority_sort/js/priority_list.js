@@ -18,8 +18,8 @@ PriorityListManager.prototype.init = function() {
 PriorityListManager.prototype.processListItems = function() {
   var _this = this;
   $.each(this.$allListItems, function() {
-    if(!$(this).attr(_this.dataPriorityOrder)) {
-      $(this).data('priority-order', '9999');
+    if(!$(this).data(_this.dataPriorityOrder)) {
+      $(this).data(_this.dataPriorityOrder, '9999');
     }
   });
 };
@@ -100,7 +100,7 @@ PriorityListManager.prototype.sortAlphabetically = function($listItems) {
 
 //Function which returns priority value of list item
 PriorityListManager.prototype.getPriorityOrder = function(element) {
-  return ($(element).data('priority-order'));
+  return ($(element).data(this.dataPriorityOrder));
 };
 
 //Function which returns text of item
@@ -114,7 +114,7 @@ $(function() {
     allListItems : '[data-id="list-item"]',
     priorityAttribute : '[data-priority-order]',
     initialItemCount : 'data-initial-item-count',
-    dataPriorityOrder : 'data-priority-order'
+    dataPriorityOrder : 'priority-order'
   },
     list = new PriorityListManager(options);
   list.init();
