@@ -36,8 +36,7 @@ ContactManager.prototype.searchContacts = function() {
       searchTerm = this.searchInput.val().toLowerCase();
   $.each(this.contactList, function(index, elem) {
     if(this.name.indexOf(searchTerm) !== -1) {
-      contact = elem.createContact();
-      _tempContactList.push(contact);
+      _tempContactList.push(elem.userDiv);
     }
   });
   this.displayContactList(_tempContactList);
@@ -52,14 +51,14 @@ ContactManager.prototype.contactCreator = function() {
       },
       user = new Contact(contact);
   if(user.validateContact()) {
+    contact = user.createContact();
     this.contactList.push(user);
-    this.displayContact(user);
+    this.displayContact(contact);
   }
 };
 
 //Function to display contact
-ContactManager.prototype.displayContact = function(user) {
-  var contact = user.createContact();
+ContactManager.prototype.displayContact = function(contact) {
   this.contactDisplayBlock.append(contact);
   this.contactForm[0].reset();
 };
@@ -70,7 +69,6 @@ ContactManager.prototype.processUserInformation = function(info) {
 
 //Function to display contacts
 ContactManager.prototype.displayContactList = function(List) {
-  var _this = this;
   this.contactDisplayBlock.empty();
   this.contactDisplayBlock.append(List);
 };

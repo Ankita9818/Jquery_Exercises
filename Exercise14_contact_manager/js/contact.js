@@ -10,6 +10,7 @@ Contact.prototype.createContact = function() {
   var contactDiv = this.createContactView(this.name);
   this.appendInfo(contactDiv, this.email);
   this.appendInfo(contactDiv, this.name);
+  this.userDiv = contactDiv;
   return contactDiv;
 };
 
