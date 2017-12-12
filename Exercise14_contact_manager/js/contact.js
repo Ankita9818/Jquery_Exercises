@@ -42,7 +42,7 @@ Contact.prototype.createContactView = function(name) {
       'data-id' : this.uniqueId
     }).addClass('contact-div'),
     deleteContact = $('<button>', {
-      'data-usage' : 'deleteContact',
+      'data-usage' : 'delete-contact',
       'data-id' : this.uniqueId,
       'text' : 'Delete Contact'
     }).addClass('btn');

@@ -1,8 +1,8 @@
 //Class ContactManager
 function ContactManager(options) {
   this.contactForm = options.contactForm;
-  this.userNameInput = options.userNameInput;
-  this.userMailInput = options.userMailInput;
+  this.userNameInput = this.contactForm.find('input[data-usage="name"]');
+  this.userMailInput = this.contactForm.find('input[data-usage="email"]');
   this.addContactButton = options.addContactButton;
   this.contactDisplayBlock = options.contactDisplayBlock;
   this.searchInput = options.searchInput;
@@ -51,13 +51,13 @@ ContactManager.prototype.contactCreator = function() {
       user = new Contact(contact);
   if(user.validateContact()) {
     this.contactList.push(user);
-    contact = user.createContact();
-    this.displayContact(contact);
+    this.displayContact(user);
   }
 };
 
 //Function to display contact
-ContactManager.prototype.displayContact = function(contact) {
+ContactManager.prototype.displayContact = function(user) {
+  var contact = user.createContact();
   this.contactDisplayBlock.append(contact);
   this.contactForm[0].reset();
 };
@@ -72,14 +72,13 @@ ContactManager.prototype.displayContactList = function(List) {
       contact;
   this.contactDisplayBlock.empty();
   $.each(List, function() {
-    contact = this.createContact();
-    _this.displayContact(contact);
+    _this.displayContact(this);
   });
 };
 
 //Function which deletes the contact
 ContactManager.prototype.deleteUserContact = function(contactId) {
-  var indexSpliced = this.deleteContactFromList(contactId);
+  this.deleteContactFromList(contactId);
   $('[data-id=' + contactId + ']').remove();
 };
 
@@ -97,12 +96,10 @@ ContactManager.prototype.deleteContactFromList = function(contactId) {
 $(function() {
   var options = {
     contactForm : $('[data-usage="contact-form"]'),
-    userNameInput : $('input[data-usage="name"]'),
-    userMailInput : $('input[data-usage="email"]'),
     addContactButton : $('input[data-usage="add-btn"]'),
     contactDisplayBlock : $('[data-usage="contact-display"]'),
     searchInput : $('[data-usage="search-input"]'),
-    deleteContact : '[data-usage="deleteContact"]',
+    deleteContact : '[data-usage="delete-contact"]',
   },
     contact = new ContactManager(options);
   contact.init();
