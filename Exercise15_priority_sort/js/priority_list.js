@@ -17,10 +17,10 @@ PriorityListManager.prototype.init = function() {
 //Function which adds data-attribute priority order to all list items
 PriorityListManager.prototype.processListItems = function() {
   var _this = this;
-  const defaultPriority = '9999';
+  const DEFAULT_PRIORITY = '9999';
   $.each(this.$allListItems, function() {
     if(!$(this).data(_this.dataPriorityOrder)) {
-      $(this).data(_this.dataPriorityOrder, defaultPriority);
+      $(this).data(_this.dataPriorityOrder, DEFAULT_PRIORITY);
     }
   });
 };
