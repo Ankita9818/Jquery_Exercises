@@ -6,6 +6,8 @@ function PriorityListManager(options) {
   this.dataPriorityOrder = options.dataPriorityOrder;
 }
 
+PriorityListManager.prototype.DEFAULT_PRIORITY = '9999';
+
 PriorityListManager.prototype.init = function() {
   this.$linkAll = this.appendLink('all');
   this.$linkLess = this.appendLink('less');
@@ -17,10 +19,9 @@ PriorityListManager.prototype.init = function() {
 //Function which adds data-attribute priority order to all list items
 PriorityListManager.prototype.processListItems = function() {
   var _this = this;
-  const DEFAULT_PRIORITY = '9999';
   $.each(this.$allListItems, function() {
     if(!$(this).data(_this.dataPriorityOrder)) {
-      $(this).data(_this.dataPriorityOrder, DEFAULT_PRIORITY);
+      $(this).data(_this.dataPriorityOrder, _this.DEFAULT_PRIORITY);
     }
   });
 };
