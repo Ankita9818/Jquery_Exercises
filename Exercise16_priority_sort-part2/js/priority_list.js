@@ -108,10 +108,10 @@ PriorityListManager.prototype.sortElements = function(sortingELement) {
   var checkedCriteria = $('[data-grp="sorting-criteria"]:checked').attr('data-id'),
       checkedOrder = $('[data-grp="sorting-order"]:checked').attr('data-id');
   this.$allListItems.show();
-  if(checkedCriteria == 'alphabetic-sort') {
-    this.sortAlphabetically(this.$allListItems,checkedOrder);
-  } else {
+  if(checkedCriteria == this.convertToLowerCase(this.SORTING_CRITERIA[0])) {
     this.sortByPriorityOrder(this.$allListItems,checkedOrder);
+  } else {
+    this.sortAlphabetically(this.$allListItems,checkedOrder);
   }
   this.displayItems();
 };
@@ -152,9 +152,9 @@ PriorityListManager.prototype.sortByPriorityOrder = function($listItems, order) 
   var _this = this;
   $listItems.sort(function(elem1, elem2) {
     if(_this.getPriorityOrder(elem1) > _this.getPriorityOrder(elem2)) {
-      return (order == 'ascending') ? 1 : -1;
+      return (order == _this.convertToLowerCase(_this.SORTING_ORDER[0])) ? 1 : -1;
     } else {
-      return (order == 'ascending') ? -1 : 1;
+      return (order == _this.convertToLowerCase(_this.SORTING_ORDER[0])) ? -1 : 1;
     }
   });
 };
@@ -164,11 +164,15 @@ PriorityListManager.prototype.sortAlphabetically = function($listItems, order) {
   var _this = this;
   $listItems.sort(function(elem1, elem2) {
     if(_this.getContent(elem1) > _this.getContent(elem2)) {
-      return (order == 'ascending') ? 1 : -1;
+      return (order == _this.convertToLowerCase(_this.SORTING_ORDER[0])) ? 1 : -1;
     } else {
-      return (order == 'ascending') ? -1 : 1;
+      return (order == _this.convertToLowerCase(_this.SORTING_ORDER[0])) ? -1 : 1;
     }
   });
+};
+
+PriorityListManager.prototype.convertToLowerCase = function (string) {
+  return string.toLowerCase();
 };
 
 //Function which returns priority value of list item
