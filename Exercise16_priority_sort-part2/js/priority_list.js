@@ -25,7 +25,7 @@ PriorityListManager.prototype.init = function() {
 PriorityListManager.prototype.appendLinks = function() {
   this.$linkAll = this.createLink('all');
   this.$linkLess = this.createLink('less');
-}
+};
 
 //Function to display create link
 PriorityListManager.prototype.createLink = function(linkText) {
@@ -106,7 +106,7 @@ PriorityListManager.prototype.bindClickListeners = function() {
 //Function to sort List elements as per checked buttons
 PriorityListManager.prototype.sortElements = function(sortingELement) {
   var checkedCriteria = $('[data-grp="sorting-criteria"]:checked'),
-      checkedOrder = $('[data-grp="sorting-order"]:checked');;
+      checkedOrder = $('[data-grp="sorting-order"]:checked');
   this.$allListItems.show();
   if(checkedCriteria.attr('data-id') == 'alphabetic-sort') {
     this.sortAlphabetically(this.$allListItems,checkedOrder.attr('data-id'));
@@ -118,7 +118,7 @@ PriorityListManager.prototype.sortElements = function(sortingELement) {
 
 //Function which displays Items as per chosen link
 PriorityListManager.prototype.displayItems = function() {
-  (this.visibleAllListItems) ? this.displayAllItems() : this.displayInitialItems();
+  this.visibleAllListItems ? this.displayAllItems() : this.displayInitialItems();
 };
 
 //Function to display Initial Items
