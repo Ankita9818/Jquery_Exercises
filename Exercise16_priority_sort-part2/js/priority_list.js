@@ -105,13 +105,13 @@ PriorityListManager.prototype.bindClickListeners = function() {
 
 //Function to sort List elements as per checked buttons
 PriorityListManager.prototype.sortElements = function(sortingELement) {
-  var checkedCriteria = $('[data-grp="sorting-criteria"]:checked'),
-      checkedOrder = $('[data-grp="sorting-order"]:checked');
+  var checkedCriteria = $('[data-grp="sorting-criteria"]:checked').attr('data-id'),
+      checkedOrder = $('[data-grp="sorting-order"]:checked').attr('data-id');
   this.$allListItems.show();
-  if(checkedCriteria.attr('data-id') == 'alphabetic-sort') {
-    this.sortAlphabetically(this.$allListItems,checkedOrder.attr('data-id'));
+  if(checkedCriteria == 'alphabetic-sort') {
+    this.sortAlphabetically(this.$allListItems,checkedOrder);
   } else {
-    this.sortByPriorityOrder(this.$allListItems,checkedOrder.attr('data-id'));
+    this.sortByPriorityOrder(this.$allListItems,checkedOrder);
   }
   this.displayItems();
 };
