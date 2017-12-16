@@ -58,11 +58,11 @@ PriorityListManager.prototype.createButtonView = function(id, btnGroupName, inde
     'text' : id,
     'class' : 'btn',
     'for' : id,
-    'data-grp' : btnGroupName
   }),
     $radioButton = $('<input />', {
       'type' : 'radio',
       'name' : btnGroupName,
+      'data-grp' : btnGroupName,
       'value' : id.toUpperCase(),
       'class' : 'btn-radio',
       'data-category' : 'btn',
@@ -70,7 +70,7 @@ PriorityListManager.prototype.createButtonView = function(id, btnGroupName, inde
       'text' : id.toUpperCase(),
       'id' : id
     });
-  if(index == 0) {
+  if(!index) {
     $radioButton.prop('checked', true);
   }
   this.$headerTab.append($radioButton);
@@ -105,8 +105,8 @@ PriorityListManager.prototype.bindClickListeners = function() {
 
 //Function to sort List elements as per checked buttons
 PriorityListManager.prototype.sortElements = function(sortingELement) {
-  var checkedCriteria = $('[name="sorting-criteria"]:checked'),
-      checkedOrder = $('[name="sorting-order"]:checked');;
+  var checkedCriteria = $('[data-grp="sorting-criteria"]:checked'),
+      checkedOrder = $('[data-grp="sorting-order"]:checked');;
   this.$allListItems.show();
   if(checkedCriteria.attr('data-id') == 'alphabetic-sort') {
     this.sortAlphabetically(this.$allListItems,checkedOrder.attr('data-id'));
@@ -188,7 +188,7 @@ $(function() {
     priorityAttribute : '[data-priority-order]',
     initialItemCount : 'data-initial-item-count',
     dataPriorityOrder : 'priority-order',
-    $container : $('.container')
+    $container : $('[data-id="container"]')
   },
     list = new PriorityListManager(options);
   list.init();
