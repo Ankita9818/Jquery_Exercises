@@ -6,7 +6,7 @@ function PriorityListManager(options) {
   this.dataPriorityOrder = options.dataPriorityOrder;
 }
 
-PriorityListManager.prototype.DEFAULT_PRIORITY = '9999';
+PriorityListManager.prototype.DEFAULT_PRIORITY = Number.MAX_SAFE_INTEGER;
 
 PriorityListManager.prototype.init = function() {
   this.$linkAll = this.appendLink('all');
