@@ -1,0 +1,90 @@
+[
+  {
+    "ingredient_name": "Bread",
+    "ingredient_values": [
+      {
+        "name":"Wheat",
+        "price" : 10
+      },
+      {
+        "name":"Italian",
+        "price" : 15
+      },
+      {
+        "name":"Oat",
+        "price" : 20
+      },
+      {
+        "name":"Plain",
+        "price" : 5
+      },
+            {
+        "name":"Plain7",
+        "price" : 59
+      }
+    ]
+  },
+  {
+    "ingredient_name": "Patty",
+    "ingredient_values": [
+      {
+        "name":"Aloo",
+        "price" : 10
+      },
+      {
+        "name":"chicken",
+        "price" : 15
+      },
+      {
+        "name":"paneer",
+        "price" : 20
+      },
+      {
+        "name":"mix veg",
+        "price" : 5
+      }
+    ]
+  },
+  {
+    "ingredient_name": "Sauce",
+    "ingredient_values": [
+      {
+        "name":"mint",
+        "price" : 10
+      },
+      {
+        "name":"tomato",
+        "price" : 15
+      },
+      {
+        "name":"soya",
+        "price" : 20
+      },
+      {
+        "name":"barbeque",
+        "price" : 5
+      }
+    ]
+  },
+  {
+    "ingredient_name": "Vegetable",
+    "ingredient_values": [
+      {
+        "name":"pickle",
+        "price" : 10
+      },
+      {
+        "name":"chicken",
+        "price" : 15
+      },
+      {
+        "name":"chezwan",
+        "price" : 20
+      },
+      {
+        "name":"jalapeno",
+        "price" : 5
+      }
+    ]
+  }
+]

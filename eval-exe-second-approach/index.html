@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Subway Store</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8">
+        <div data-id="grid-container" class="grid-container">
+        </div>
+        <div class="current-order-container" data-id="current-order-container">
+          <h3>Current Order</h3>
+          <div class="total-order-amount" data-id="total-order-amount">
+          </div>
+          <div class="current-order-display" data-id="current-order-display">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="sale" data-id="sale">Todays' sale is 0</div>
+        <div class="pending-order-container" data-id="pending-order-container">
+          <h4>Pending Orders</h4>
+        </div>
+        <div class="deleivered-order-container" data-id="deleivered-order-container">
+          <h4>Deleivered Orders</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="lib/jquery-3.2.1.js"></script>
+<script src="js/ingredient.js"></script>
+<script src="js/order.js"></script>
+<script src="js/store.js"></script>
+</body>
+</html>

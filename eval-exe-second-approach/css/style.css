@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.grid-container,.current-order-container, .pending-order-container,.deleivered-order-container{
+  border: 1px solid black;
+  min-height: 50vh;
+  padding: 10px 30px;
+}
+
+.pending-order-container {
+  min-height: calc(50vh - 30px);
+}
+
+.sale {
+  background-color: black;
+  color: white;
+  padding: 5px;
+}
+
+.ingredient-divs {
+  border: 1px solid grey;
+  padding: 4px;
+  margin-bottom: 2px;
+  cursor: pointer;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.current-order {
+  border: 1px solid black;
+  text-align: center;
+  padding: 10px;
+}
+
+.btn {
+  background-color: black;
+  color: white;
+  display: block;
+}
+
+.btn:hover {
+  border-color: black;
+  background-color: white;
+}
+
+.order-container {
+  display: inline-block;
+  width: 70%;
+}
+
+.padding {
+  display: inline-block;
+  padding: 2px 5px;
+  text-align: center;
+}
